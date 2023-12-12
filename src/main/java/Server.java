@@ -88,6 +88,7 @@ public class Server {
                                 chat(in, out);
                                 break;
                             case "listMusics":
+                                Utils.p("ListMusics");
                                 getListMusics(out);
                                 break;
                             case "download":
@@ -100,7 +101,7 @@ public class Server {
                                 break;
                             default:
                                 //send a message to the client to say that the command is not found
-                                out.println("Command not found");
+                                out.println("Command not found [server side]");
                                 break;
                         }
                     } catch (Exception e) {
