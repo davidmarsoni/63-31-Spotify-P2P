@@ -1,3 +1,4 @@
+package Classes;
 import utils.Utils;
 
 public class PlayList extends Entry {

@@ -6,66 +6,39 @@ import utils.Storage;
 import utils.Utils;
 
 public class InitCommand implements Command {
+    // get the storage instance
     private Storage storage = Storage.getInstance();
+    // create a scanner to get the user input
     private Scanner sc = new Scanner(System.in);
 
+    /**
+     * Execute the command
+     * @param argument argument is not used
+     */
     @Override
     public void execute(String argument) {
+        // print the title
         Utils.titleDesc("Init", "Configure the server address and port");
+
         // Ask for the server address and port and verify if it's valid
-        boolean valid = false;
-        String tempServerName = "";
         String serverName = storage.getServerAddress();
         int serverPort = storage.getServerPort();
 
-        do {
-            System.out.print("Server address " + Utils.ANSI_BLUE + "(" + storage.getServerAddress() + ")"
-                    + Utils.ANSI_RESET + " : ");
-            tempServerName = sc.nextLine().trim();
-            // use a regex to check if the ip is valid
-            if (tempServerName.equals("")) {
-                tempServerName = serverName;
-            }
-
-            if (tempServerName.matches("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])(\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])){3}$")) {
-                valid = true;
-            } else {
-                System.out.println("Invalid IP address");
-            }
-        } while (!valid);
-
-        serverName = tempServerName;
-
-        valid = false;
-        int tempServerPort = 0;
-        String input = "";
-
-        do {
-            System.out.print("Server port " + Utils.ANSI_BLUE + "(" + serverPort + ")" + Utils.ANSI_RESET + " : ");
-            // if the port is empty, use the default port or if it equals 0 if the user
-            // press enter use default port
-            input = sc.nextLine().trim();
-            if (input.equals("")) {
-                tempServerPort = serverPort;
-                valid = true;
-            } else {
-                try {
-                    tempServerPort = Integer.parseInt(input);
-                    if (tempServerPort > 0 && tempServerPort < 65535) {
-                        valid = true;
-                    } else {
-                        System.out.println("Invalid port number");
-                    }
-                } catch (Exception e) {
-                    System.out.println("Invalid port number");
-                }
-            }
-        } while (!valid);
-
+        // loop until the user enter a valid ip address
+        serverName = Utils.ask("Server address", serverName, "^([0-9]{1,3}\\.){3}[0-9]{1,3}$", serverName, true);
+        serverPort = Integer.parseInt(Utils.ask("Server port", String.valueOf(serverPort), "^([0-9]{1,4}|[0-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6])$", String.valueOf(serverPort), true));
         storage.setServerAddress(serverName);
-        storage.setServerPort(tempServerPort);
+        storage.setServerPort(serverPort);
+
+        Utils.p("");
+        Utils.p ("New server address and port saved");
+        Utils.p ("Server : "+Utils.ANSI_BLUE+serverName+Utils.ANSI_RESET+":"+Utils.ANSI_BLUE+serverPort+Utils.ANSI_RESET);
+        Utils.p("");
     }
 
+    /**
+     * Return the help of the command
+     */
     @Override
     public String help() {
         return "Allow you to configure the server address and port";

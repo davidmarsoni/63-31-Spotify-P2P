@@ -1,16 +1,8 @@
-import java.io.*;
-import java.net.ConnectException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-
+import java.net.*;
+import java.util.*;
 import Commands.*;
-import utils.Storage;
-import utils.Utils;
+import utils.*;
+
 public class Client {
     static Socket clientSocket;
     static InetAddress serverAddress;
@@ -24,10 +16,11 @@ public class Client {
         loop();
     }
 
-
+    /**
+     * Loop to get the user input
+     */
     public static void loop(){
         String input = "";
-
         while (true) {
             System.out.print("> ");
             //wait for the user input and trim it

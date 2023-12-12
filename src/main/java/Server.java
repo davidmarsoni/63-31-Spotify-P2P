@@ -8,6 +8,9 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import Classes.Entry;
+import Classes.MusicFile;
+import Classes.PlayList;
 import utils.*;
 
 public class Server {

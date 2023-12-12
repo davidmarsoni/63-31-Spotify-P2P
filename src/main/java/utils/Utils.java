@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.io.IOException;
+import java.util.*;
 
 public class Utils {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -76,5 +77,38 @@ public class Utils {
             p(desc);
             p("");
         }
+    }
+
+    public static String ask(String question, String tooltips, String regex1, String regex2, boolean isDefault) {
+        Scanner sc = new Scanner(System.in);
+        String type = "";
+        boolean valid = false;
+        do {
+            System.out.print(question + " " + ANSI_BLUE + "(" + tooltips + ")" + ANSI_RESET + " : ");
+            type = sc.nextLine().trim().toLowerCase();
+            if (isDefault && type.equals("")) {
+                type = regex2;
+                valid = true;
+            } 
+
+            if (type.matches(regex1) || type.matches(regex2)) {
+                valid = true;
+            } else {
+                System.out.println("Invalid type");
+            }
+        } while (!valid);
+        return type;
+    }
+
+    public static String ask(String question, String tooltips, String regex1, String regex2) {
+        return ask(question, tooltips, regex1, regex2, false);
+    }
+
+    public static String ask(String question, String tooltips, String regex) {
+        return ask(question, tooltips, regex, "", false);
+    }
+
+    public static String ask(String question, String tooltips) {
+        return ask(question, tooltips, ".*", "", false);
     }
 }
