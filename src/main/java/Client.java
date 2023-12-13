@@ -6,7 +6,7 @@ import utils.*;
 public class Client {
     static Socket clientSocket;
     static InetAddress serverAddress;
-    static Storage storage = Storage.getInstance();
+    static StorageClient storage = StorageClient.getInstance();
     static Map<String, Command> commands = storage.getCommands();
     static Scanner sc = new Scanner(System.in);
 

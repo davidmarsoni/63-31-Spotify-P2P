@@ -9,8 +9,8 @@ import Commands.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Storage {
-    private static Storage instance;
+public class StorageClient {
+    private static StorageClient instance;
     private String serverAddress = "127.0.0.1";
     private int serverPort = 45000;
     private String clientAddress ="127.0.0.1";
@@ -18,11 +18,11 @@ public class Storage {
     private Socket clientSocket;
     private Map<String, Command> commands;
 
-    private Storage() {
+    private StorageClient() {
     }
-    public static Storage getInstance() {
+    public static StorageClient getInstance() {
         if (instance == null) {
-            instance = new Storage();
+            instance = new StorageClient();
             instance.load();
         }
         return instance;

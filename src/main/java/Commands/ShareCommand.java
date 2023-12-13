@@ -6,7 +6,7 @@ import java.io.*;
 import Classes.MusicFile;
 
 public class ShareCommand implements Command{
-    private Storage storage = Storage.getInstance();
+    private StorageClient storage = StorageClient.getInstance();
 
     @Override
     public void execute(String argument) {

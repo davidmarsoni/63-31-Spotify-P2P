@@ -6,11 +6,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import utils.Storage;
+import utils.StorageClient;
 import utils.Utils;
 
 public class ConnectCommand implements Command {
-    private Storage storage = Storage.getInstance();
+    private StorageClient storage = StorageClient.getInstance();
     private String serverName;
     private int serverPort;
 

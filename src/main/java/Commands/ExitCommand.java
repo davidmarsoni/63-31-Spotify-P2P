@@ -1,13 +1,13 @@
 package Commands;
 
-import utils.Storage;
+import utils.StorageClient;
 
 /**
  * Exit command
  * This command exit the program
  */
 public class ExitCommand implements Command {
-    private Storage storage = Storage.getInstance();
+    private StorageClient storage = StorageClient.getInstance();
 
     public ExitCommand() {}
     @Override

@@ -1,16 +1,11 @@
 package Commands;
-
-import java.util.Scanner;
-
-import utils.Storage;
+import utils.StorageClient;
 import utils.Utils;
 
 public class InitCommand implements Command {
     // get the storage instance
-    private Storage storage = Storage.getInstance();
+    private StorageClient storage = StorageClient.getInstance();
     // create a scanner to get the user input
-    private Scanner sc = new Scanner(System.in);
-
     /**
      * Execute the command
      * @param argument argument is not used

@@ -1,7 +1,7 @@
 package Commands;
 import java.util.*;
 
-import utils.Storage;
+import utils.StorageClient;
 import utils.Utils;
 
 /**
@@ -9,7 +9,7 @@ import utils.Utils;
  * This command display the list of all the commands available or a specific command
  */
 public class HelpClientCommand implements Command {
-    private Storage storage = Storage.getInstance(); // Storage of the client
+    private StorageClient storage = StorageClient.getInstance(); // Storage of the client
     Map<String,Command> commands; // List of all the commands available
 
     /**

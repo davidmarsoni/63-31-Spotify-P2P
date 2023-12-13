@@ -1,10 +1,10 @@
 package Commands;
 
-import utils.Storage;
+import utils.StorageClient;
 import java.io.*;
 
 public class ListMusicsCommand implements Command{
-    private Storage storage = Storage.getInstance();
+    private StorageClient storage = StorageClient.getInstance();
     @Override
     public void execute(String argument) {
         if(storage.getClientSocket() == null) {

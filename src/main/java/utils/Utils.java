@@ -97,6 +97,8 @@ public class Utils {
                 System.out.println("Invalid type");
             }
         } while (!valid);
+
+        sc.close();
         return type;
     }
 
