@@ -15,7 +15,6 @@ public class StorageClient {
     private int serverPort = 45000;
     private InetAddress clientAddress;
     private int clientPort = 40000;
-    private int clientListeningPort = 35000;
     private Socket clientSocket;
     private Map<String, CommandClient> commands;
     private LinkedList<Entry> entries = new LinkedList<Entry>();
@@ -203,18 +202,5 @@ public class StorageClient {
     public LinkedList<Entry> getSharedEntries() {
         return entries;
     }
-
-    public void setSharedEntries(LinkedList<Entry> entries) {
-        this.entries = entries;
-    }
-
-    public int getClientListeningPort() {
-        return clientListeningPort;
-    }
-
-    public void setClientListeningPort(int clientListeningPort) {
-        this.clientListeningPort = clientListeningPort;
-    }
-
 
 }

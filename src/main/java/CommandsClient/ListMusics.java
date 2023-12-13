@@ -22,6 +22,11 @@ public class ListMusics implements CommandClient{
             while (!(response = in.readLine()).equalsIgnoreCase("end")) {
                 System.out.println(response);
             }
+
+           //close the buffer and the print writer but keep the socket open
+              //in.close();
+                //out.close();
+                
         }catch (Exception e) {
             System.err.println("Error handling client connection");
             e.printStackTrace();

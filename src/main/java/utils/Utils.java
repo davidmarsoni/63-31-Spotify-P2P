@@ -45,12 +45,12 @@ public class Utils {
             System.out.println(loadFile("src/main/resources/client.txt"));
         }
         System.out.println();
-        if(!isServer){
-            System.out.println(loadFile("src/main/resources/version.txt")+" \n\n"+START_MESSAGE_WELCOME + ANSI_RESET);
+        if(isServer){
+            System.out.println(loadFile("src/main/resources/version.txt")+" \n" + ANSI_RESET);
         }else{
-            System.out.println(loadFile("src/main/resources/version.txt")+" \n\n"+ANSI_RESET);
+            System.out.println(loadFile("src/main/resources/version.txt")+" \n\n"+START_MESSAGE_WELCOME + ANSI_RESET);
         }
-        
+
     }
     
     public static String loadFile(String path) {
@@ -69,21 +69,18 @@ public class Utils {
         System.out.println(s);
     }
 
-    public static void title(String title) {
-        title(title,ANSI_BLUE_H);
-    }
-
     public static void title(String title,String color) {
         p("");
         p(color + " " + title + " " + ANSI_RESET);
         p("");
     }
 
-    public static void titleDesc(String title,String desc) {
-        p("");
-        p(ANSI_BLUE_H + " " + title + " " + ANSI_RESET);
-        p("");
+    public static void title(String title) {
+        title(title,ANSI_BLUE_H);
+    }
 
+    public static void titleDesc(String title,String desc) {
+        title(title);
         if(desc != null){
             p(desc);
             p("");

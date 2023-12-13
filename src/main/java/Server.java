@@ -1,13 +1,6 @@
 import java.io.*;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Scanner;
+import java.net.*;
+import java.util.*;
 
 import Classes.Entry;
 import Classes.MusicFile;
@@ -56,11 +49,11 @@ public class Server {
             mySkServer.setSoTimeout(180000);
 
             // print some server information
-            Utils.title("Server has Started",Utils.ANSI_WHITE+Utils.ANSI_GREEN_H);
+            Utils.title("Server Started",Utils.ANSI_GREEN_H);
             
-            System.out.println("Default Timeout    : " + mySkServer.getSoTimeout());
-            System.out.println("Used IpAddress     : " + mySkServer.getInetAddress());
-            System.out.println("Listening to Port  : " + mySkServer.getLocalPort());
+            System.out.println("Default Timeout   : " + mySkServer.getSoTimeout());
+            System.out.println("Used IpAddress    : " + mySkServer.getInetAddress());
+            System.out.println("Listening to Port : " + mySkServer.getLocalPort());
         } catch (Exception e) {
             System.err.println("Error initializing server");
             e.printStackTrace();
@@ -70,19 +63,22 @@ public class Server {
     public static void loop() {
         commands.get("help").execute(null,null,null);
         while (true) {
-            //run help command for debug
-            Utils.p(Utils.ANSI_BLUE_H+" Waiting for a client connection... "+Utils.ANSI_RESET);
-            Utils.p("");
+            Utils.title("Waiting for a client connection...",Utils.ANSI_BLUE_H);
+          
             try {
-                Socket srvSocket = storage.getMySkServer().accept();
+            Socket srvSocket = null;
+                try {
+                    srvSocket = storage.getMySkServer().accept();
+                } catch (Exception e) {
+                    System.out.println("Accept timed out. No client connected within the specified timeout period.");
+                }
                 storage.setSrvSocket(srvSocket);
-                System.out.println("Connection accepted from " + srvSocket.getInetAddress().getHostAddress()+":"+srvSocket.getPort());
-                System.out.println("");
+                System.out.println("Connection accepted from " + storage.getSrvSocket().getInetAddress().getHostAddress());
                 new Thread(() -> {
                     try {
                         //listen command from client
-                        BufferedReader in = new BufferedReader(new InputStreamReader(srvSocket.getInputStream()));
-                        PrintWriter out = new PrintWriter(srvSocket.getOutputStream(), true);
+                        BufferedReader in = new BufferedReader(new InputStreamReader(storage.getSrvSocket().getInputStream()));
+                        PrintWriter out = new PrintWriter(storage.getSrvSocket().getOutputStream(), true);
     
                         //get the command
                         String[] words = in.readLine().split(" ");
@@ -104,7 +100,7 @@ public class Server {
                         e.printStackTrace();
                     } finally {
                         try {
-                            srvSocket.close();
+                            storage.getSrvSocket().close();
                         } catch (IOException e) {
                             System.err.println("Error closing client socket");
                             e.printStackTrace();
@@ -113,8 +109,7 @@ public class Server {
                 }).start();
     
             } catch (Exception e) {
-                System.err.println("Error accepting client connection");
-                e.printStackTrace();
+                System.err.println("No client connection durrint this wait time");
             }
         }
     }

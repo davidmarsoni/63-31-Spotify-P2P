@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 import utils.StorageServer;
+import utils.Utils;
 
 public class ClientShareInfoCommand implements CommandServer {
     private StorageServer storage = StorageServer.getInstance();
@@ -18,8 +19,8 @@ public class ClientShareInfoCommand implements CommandServer {
             
             storage.setClientAddress(ip);
             storage.setClientPort(port);
-            //send the response to the client
-            out.println("received");
+
+            System.out.println("Client address for listening : " +Utils.ANSI_BLUE+ ip + Utils.ANSI_RESET+":" +Utils.ANSI_BLUE+ port + Utils.ANSI_RESET);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -28,7 +29,7 @@ public class ClientShareInfoCommand implements CommandServer {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return "allow the server to get the ip and listening port of the client";
+        throw new UnsupportedOperationException("Unimplemented method 'help'");
     }
     
 }

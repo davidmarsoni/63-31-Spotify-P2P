@@ -36,7 +36,7 @@ public class Client {
                 if (cmd != null) {
                     cmd.execute(argument);
                 } else {
-                    System.out.println("Command not found "+Utils.ANSI_YELLOW+ command+Utils.ANSI_RESET);
+                    System.out.println("Command not found "+Utils.ANSI_BLUE+ command+Utils.ANSI_RESET);
                 }
             }
         }

@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import java.util.*;
 import Classes.Entry;
 import Classes.MusicFile;
-import CommandsServer.ClientShareInfoCommand;
+
 import CommandsServer.CommandServer;
 import CommandsServer.HandleShareCommand;
 import CommandsServer.HelpCommand;
@@ -42,7 +42,6 @@ public class StorageServer {
         commands.put("help", new HelpCommand());
         commands.put("listMusics", new SendListEntryCommand());
         commands.put("share", new HandleShareCommand());
-        commands.put("shareInfo", new ClientShareInfoCommand());
 
         entries.add(new MusicFile("sss", 123, "sss", "sss"));
     }

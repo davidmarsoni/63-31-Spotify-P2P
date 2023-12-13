@@ -51,11 +51,6 @@ public class Share implements CommandClient{
             //create the playlist
             PlayList playList = new PlayList(storage.getClientAddress(),storage.getClientPort(),args[1],musicFiles);
             storage.addSharedEntry(playList);
-
-            data = "playlist "+playList.getPlayListName();
-            for (MusicFile musicFile : musicFiles) {
-                data += " "+musicFile.getMusicName()+" "+musicFile.getMusicPath();
-            }
         }
         
         try {
@@ -71,6 +66,9 @@ public class Share implements CommandClient{
                 System.out.println(response);
             
             }
+
+            in.close();
+            out.close();
         }catch (Exception e) {
             System.err.println("Error handling client connection");
             e.printStackTrace();
