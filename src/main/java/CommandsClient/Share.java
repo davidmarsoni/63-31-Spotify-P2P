@@ -1,13 +1,15 @@
-package Commands;
+package CommandsClient;
 
 import utils.*;
 import java.io.*;
+import java.util.ArrayList;
 
 import Classes.MusicFile;
+import Classes.PlayList;
 
-public class ShareCommand implements Command{
+public class Share implements CommandClient{
     private StorageClient storage = StorageClient.getInstance();
-
+    private String data = "";
     @Override
     public void execute(String argument) {
         Utils.titleDesc("Share a file", "Share a file or a playlist with other users");
@@ -19,12 +21,41 @@ public class ShareCommand implements Command{
         
         String args[] = argument.split(" ");
         if(args.length == 1){
+            System.out.println(args[0]);
+        
             File file = new File(args[0]);
+            //test if the file exist
+            if(!file.exists()){
+                Utils.p("The file "+Utils.ANSI_BLUE+args[0]+Utils.ANSI_RESET+" doesn't exist");
+                return;
+            }
             MusicFile musicFile = new MusicFile(storage.getClientAddress(),storage.getClientPort(),file.getName(),file.getAbsolutePath());
-            Utils.p("file");
+            storage.addSharedEntry(musicFile);
+
+           
+            data = "file "+musicFile.getMusicName()+" "+musicFile.getMusicPath();
         }else if(args.length == 2){
-            //TODO : get the folder directory and the name of the playlist and create a playlist object
-            Utils.p("folder");
+            ArrayList<MusicFile> musicFiles = new ArrayList<MusicFile>();
+            File folder = new File(args[0]);
+            File[] listOfFiles = folder.listFiles();
+            if(!folder.exists() || listOfFiles.length == 0){
+                Utils.p("The folder "+Utils.ANSI_BLUE+args[0]+Utils.ANSI_RESET+" doesn't exist or is empty");
+                return;
+            }
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if(listOfFiles[i].isFile()){
+                    MusicFile musicFile = new MusicFile(storage.getClientAddress(),storage.getClientPort(),listOfFiles[i].getName(),listOfFiles[i].getAbsolutePath());
+                    musicFiles.add(musicFile);
+                }
+            }
+            //create the playlist
+            PlayList playList = new PlayList(storage.getClientAddress(),storage.getClientPort(),args[1],musicFiles);
+            storage.addSharedEntry(playList);
+
+            data = "playlist "+playList.getPlayListName();
+            for (MusicFile musicFile : musicFiles) {
+                data += " "+musicFile.getMusicName()+" "+musicFile.getMusicPath();
+            }
         }
         
         try {
@@ -33,7 +64,7 @@ public class ShareCommand implements Command{
 
             //send the command to the server
             out.println("share");
-
+            out.println(data);
             //listen the response from the server
             String response = "";
             while (!(response = in.readLine()).equalsIgnoreCase("end")) {

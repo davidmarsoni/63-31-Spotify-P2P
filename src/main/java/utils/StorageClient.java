@@ -1,24 +1,37 @@
 package utils;
 
 import java.io.*;
-
-import java.net.Socket;
-
-import Commands.*;
-
+import java.net.*;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+
+import Classes.Entry;
+import CommandsClient.*;
 
 public class StorageClient {
     private static StorageClient instance;
-    private String serverAddress = "127.0.0.1";
+    private InetAddress serverAddress;
     private int serverPort = 45000;
-    private String clientAddress ="127.0.0.1";
+    private InetAddress clientAddress;
     private int clientPort = 40000;
+    private int clientListeningPort = 35000;
     private Socket clientSocket;
-    private Map<String, Command> commands;
+    private Map<String, CommandClient> commands;
+    private LinkedList<Entry> entries = new LinkedList<Entry>();
 
     private StorageClient() {
+        try {
+            serverAddress = InetAddress.getByName("127.0.0.1");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            clientAddress = InetAddress.getByName("127.0.0.1");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }   
     }
     public static StorageClient getInstance() {
         if (instance == null) {
@@ -31,9 +44,9 @@ public class StorageClient {
     public void save() {
         try {
             PrintWriter writer = new PrintWriter("storage.txt");
-            writer.println(serverAddress);
+            writer.println(serverAddress.getHostAddress());
             writer.println(serverPort);
-            writer.println(clientAddress);
+            writer.println(clientAddress.getHostAddress());
             writer.println(clientPort);
             writer.close();
         } catch (FileNotFoundException e) {
@@ -46,9 +59,17 @@ public class StorageClient {
         if (file.exists()) {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(file));
-                this.serverAddress = reader.readLine();
+                try {
+                    this.serverAddress = InetAddress.getByName(reader.readLine());
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
                 this.serverPort = Integer.parseInt(reader.readLine());
-                this.clientAddress = reader.readLine();
+                try {
+                    this.clientAddress = InetAddress.getByName(reader.readLine());
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
                 this.clientPort = Integer.parseInt(reader.readLine());
                 reader.close();
             } catch (IOException e) {
@@ -62,16 +83,18 @@ public class StorageClient {
 
     private void initCommands() {
         commands = new HashMap<>();
-        commands.put("connect", new ConnectCommand(serverAddress, serverPort));
-        commands.put("help", new HelpClientCommand());
-        commands.put("exit", new ExitCommand());
-        commands.put("init", new InitCommand());
-        commands.put("listMusics", new ListMusicsCommand());
-        commands.put("share", new ShareCommand());
+        commands.put("connect", new Connect());
+        commands.put("help", new Help());
+        commands.put("exit", new Exit());
+        commands.put("init", new Init());
+        commands.put("listMusics", new ListMusics());
+        commands.put("share", new Share());
+        commands.put("config", new Config());
+        commands.put("test", new Test());
     }
 
     public String getServerAddress() {
-        return this.serverAddress;
+        return this.serverAddress.getHostAddress();
     }
 
     public int getServerPort() {
@@ -90,11 +113,11 @@ public class StorageClient {
         clientSocket = socket;
     }
 
-    public Map<String, Command> getCommands() {
+    public Map<String, CommandClient> getCommands() {
         return commands;
     }
 
-    public void setCommands(Map<String, Command> commands) {
+    public void setCommands(Map<String, CommandClient> commands) {
         this.commands = commands;
     }
 
@@ -110,7 +133,11 @@ public class StorageClient {
 
     public void setClientAddress(String clientAddress) {
         if (isValidIpAddress(clientAddress)) {
-            this.clientAddress = clientAddress;
+            try {
+                this.clientAddress = InetAddress.getByName(clientAddress);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
         } else {
             System.out.println("Invalid IP address");
         }
@@ -126,7 +153,11 @@ public class StorageClient {
 
     public void setServerAddress(String serverAddress) {
         if (isValidIpAddress(serverAddress)) {
-            this.serverAddress = serverAddress;
+            try {
+                this.serverAddress = InetAddress.getByName(serverAddress);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
         } else {
             System.out.println("Invalid IP address");
         }
@@ -141,7 +172,7 @@ public class StorageClient {
     }
 
     public String getClientAddress() {
-        return this.clientAddress;
+        return this.clientAddress.getHostAddress();
     }
 
     public int getClientPort() {
@@ -156,7 +187,34 @@ public class StorageClient {
         }
     }
 
-    
+    public void addSharedEntry(Entry entry){
+        entries.add(entry);
+    }
+
+    public void removeSharedEntry(Entry entry){
+        entries.remove(entry);
+    }
+
+    public void listSharedEntries(){
+        entries.forEach((entry) -> {
+            Utils.p(entry.toString());
+        });
+    }
+    public LinkedList<Entry> getSharedEntries() {
+        return entries;
+    }
+
+    public void setSharedEntries(LinkedList<Entry> entries) {
+        this.entries = entries;
+    }
+
+    public int getClientListeningPort() {
+        return clientListeningPort;
+    }
+
+    public void setClientListeningPort(int clientListeningPort) {
+        this.clientListeningPort = clientListeningPort;
+    }
 
 
 }

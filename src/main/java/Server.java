@@ -6,37 +6,34 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Scanner;
 
 import Classes.Entry;
 import Classes.MusicFile;
 import Classes.PlayList;
+import CommandsClient.CommandClient;
+import CommandsServer.CommandServer;
 import utils.*;
 
 public class Server {
-    static Socket srvSocket = null;
-    static InetAddress localAddress = null;
-    static ServerSocket mySkServer;
-    static String interfaceName = "eth1";
-    static int port = 45000;
+
+
     static Scanner sc = new Scanner(System.in);
-    static LinkedList<Entry> entries = new LinkedList<Entry>();
+    static StorageServer storage = StorageServer.getInstance();
+    static Map<String, CommandServer> commands = storage.getCommands();
 
 
     public static void main(String[] args) {
         Utils.renderStart(true);
-        entries.add(new MusicFile("123", 123, "music1", "path1"));
-        entries.add(new MusicFile("123", 123, "music2", "path2"));
-        entries.add(new MusicFile("123", 123, "music3", "path3"));
-        PlayList playList = new PlayList("123", 123, "playList1", "path1", new MusicFile[]{new MusicFile("123", 123, "music1", "path1"), new MusicFile("123", 123, "music2", "path2"), new MusicFile("123", 123, "music3", "path3")});
-        entries.add(playList);
         init();
         loop();
     }
 
     public static void init(){
+        InetAddress localAddress = null;
         try {
-            NetworkInterface ni = NetworkInterface.getByName(interfaceName);
+            NetworkInterface ni = NetworkInterface.getByName(storage.getInterfaceName());
             Enumeration<InetAddress> inetAddresses =  ni.getInetAddresses();
             while (inetAddresses.hasMoreElements()) {
                 InetAddress ia = inetAddresses.nextElement();
@@ -49,32 +46,38 @@ public class Server {
                 }
             }
             if(localAddress == null) {
-                System.out.println("No non-local address found for interface " + interfaceName);
+                System.out.println("No non-local address found for interface " + storage.getInterfaceName());
             }
+            
             // Warning: the backlog value (2nd parameter is handled by the implementation
-            mySkServer = new ServerSocket(45000, 10, localAddress);
-
+            ServerSocket mySkServer = new ServerSocket(45000, 10, localAddress);
+            storage.setMySkServer(mySkServer);
             // set 3min timeout
             mySkServer.setSoTimeout(180000);
 
             // print some server information
-            System.out.println("Server is started");
-            System.out.println("==================================");
-            System.out.println("Default Timeout :" + mySkServer.getSoTimeout());
-            System.out.println("Used IpAddress :" + mySkServer.getInetAddress());
-            System.out.println("Listening to Port :" + mySkServer.getLocalPort());
+            Utils.title("Server has Started",Utils.ANSI_WHITE+Utils.ANSI_GREEN_H);
+            
+            System.out.println("Default Timeout    : " + mySkServer.getSoTimeout());
+            System.out.println("Used IpAddress     : " + mySkServer.getInetAddress());
+            System.out.println("Listening to Port  : " + mySkServer.getLocalPort());
         } catch (Exception e) {
-
+            System.err.println("Error initializing server");
+            e.printStackTrace();
         }
     }
 
     public static void loop() {
+        commands.get("help").execute(null,null,null);
         while (true) {
+            //run help command for debug
+            Utils.p(Utils.ANSI_BLUE_H+" Waiting for a client connection... "+Utils.ANSI_RESET);
+            Utils.p("");
             try {
-                srvSocket = mySkServer.accept();
-                System.out.println("Connection accepted from " + srvSocket.getInetAddress());
-                System.out.println("==================================");
-    
+                Socket srvSocket = storage.getMySkServer().accept();
+                storage.setSrvSocket(srvSocket);
+                System.out.println("Connection accepted from " + srvSocket.getInetAddress().getHostAddress()+":"+srvSocket.getPort());
+                System.out.println("");
                 new Thread(() -> {
                     try {
                         //listen command from client
@@ -86,26 +89,15 @@ public class Server {
                         String command = words[0];
                         String argument = words.length > 1 ? words[1] : null;
     
-                        switch (command) {
-                            case "chat":
-                                chat(in, out);
-                                break;
-                            case "listMusics":
-                                Utils.p("ListMusics");
-                                getListMusics(out);
-                                break;
-                            case "download":
-                                if (argument != null) {
-                                    Utils.p("Download", argument);
-                                    downloadFile(argument, out);
-                                } else {
-                                    out.println("Please specify a music name to download.");
-                                }
-                                break;
-                            default:
-                                //send a message to the client to say that the command is not found
-                                out.println("Command not found [server side]");
-                                break;
+                        //execute the command
+                        //System.out.println("Command: " + command + " Argument: " + argument);
+                        CommandServer cmd = commands.get(command);
+                        if (cmd != null) {
+                            cmd.execute(argument,in,out);
+                        } else {
+                            System.out.println("Command not found "+Utils.ANSI_BLUE+ command+Utils.ANSI_RESET);
+                            //respond to the client
+                            out.println("Command not found "+Utils.ANSI_BLUE+ command+Utils.ANSI_RESET);
                         }
                     } catch (Exception e) {
                         System.err.println("Error handling client connection");
@@ -132,9 +124,9 @@ public class Server {
     }
 
     private static void getListMusics(PrintWriter out) {
-        Utils.p("Sending list of music to client:" + srvSocket.getInetAddress()+":"+srvSocket.getPort());
+        Utils.p("Sending list of music to client:" + storage.getSrvSocket().getInetAddress()+":"+storage.getSrvSocket().getPort());
         //for each entry send the data to the client
-        for (Entry entry : entries) {
+        for (Entry entry : storage.getEntries()) {
             out.println(entry.toString());
         }
         //send the end of the list

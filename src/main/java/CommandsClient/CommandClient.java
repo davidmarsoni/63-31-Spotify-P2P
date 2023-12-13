@@ -1,9 +1,9 @@
-package Commands;
+package CommandsClient;
 
 /**
  * Interface for the commands
  */
-public interface Command {
+public interface CommandClient {
     /**
      * Execute the command
      * @param argument the argument of the command

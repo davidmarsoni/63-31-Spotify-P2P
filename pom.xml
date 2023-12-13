@@ -9,10 +9,25 @@
     <version>1.0</version>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.umjammer</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+    </dependencies>
     <build>
         <finalName>63-31-Spotify-P2P</finalName>
         <resources>
@@ -28,7 +43,7 @@
                     <archive>
                         <manifest>
                             <mainClass>
-                                main
+                                Client
                             </mainClass>
                         </manifest>
                     </archive>

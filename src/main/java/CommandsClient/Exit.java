@@ -1,4 +1,4 @@
-package Commands;
+package CommandsClient;
 
 import utils.StorageClient;
 
@@ -6,10 +6,10 @@ import utils.StorageClient;
  * Exit command
  * This command exit the program
  */
-public class ExitCommand implements Command {
+public class Exit implements CommandClient {
     private StorageClient storage = StorageClient.getInstance();
 
-    public ExitCommand() {}
+    public Exit() {}
     @Override
     public void execute(String argument) {
         storage.save();

@@ -1,13 +1,14 @@
 import java.net.*;
 import java.util.*;
-import Commands.*;
+
+import CommandsClient.*;
 import utils.*;
 
 public class Client {
     static Socket clientSocket;
     static InetAddress serverAddress;
     static StorageClient storage = StorageClient.getInstance();
-    static Map<String, Command> commands = storage.getCommands();
+    static Map<String, CommandClient> commands = storage.getCommands();
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -31,11 +32,11 @@ public class Client {
                 String argument = words.length > 1 ? words[1] : null;
                 //System.out.println("Command: " + command + " Argument: " + argument);
 
-                Command cmd = commands.get(command);
+                CommandClient cmd = commands.get(command);
                 if (cmd != null) {
                     cmd.execute(argument);
                 } else {
-                    System.out.println("Command not found "+Utils.ANSI_BLUE+ command+Utils.ANSI_RESET);
+                    System.out.println("Command not found "+Utils.ANSI_YELLOW+ command+Utils.ANSI_RESET);
                 }
             }
         }

@@ -1,8 +1,8 @@
-package Commands;
+package CommandsClient;
 import utils.StorageClient;
 import utils.Utils;
 
-public class InitCommand implements Command {
+public class Init implements CommandClient {
     // get the storage instance
     private StorageClient storage = StorageClient.getInstance();
     // create a scanner to get the user input
@@ -21,7 +21,9 @@ public class InitCommand implements Command {
 
         // loop until the user enter a valid ip address
         serverName = Utils.ask("Server address", serverName, "^([0-9]{1,3}\\.){3}[0-9]{1,3}$", serverName, true);
-        serverPort = Integer.parseInt(Utils.ask("Server port", String.valueOf(serverPort), "^([0-9]{1,4}|[0-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6])$", String.valueOf(serverPort), true));
+        Utils.p(serverName);
+        String tmpServerPort = Utils.ask("Server port", String.valueOf(serverPort), "^([0-9]{1,4}|[0-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6])$", String.valueOf(serverPort), true);
+        serverPort = Integer.parseInt(tmpServerPort);
         storage.setServerAddress(serverName);
         storage.setServerPort(serverPort);
 
