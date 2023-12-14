@@ -12,14 +12,14 @@ public class SendListEntryCommand implements CommandServer{
 
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
-        Utils.p("Sending list of music to client:" + storage.getSrvSocket().getInetAddress()+":"+storage.getSrvSocket().getPort());
+        Utils.p("["+storage.getSrvSocket().getInetAddress().getHostAddress()+":"+storage.getSrvSocket().getPort()+"] Sending list of music to client:" );
         //for each entry send the data to the client
         for (Entry entry : storage.getEntries()) {
             out.println(entry.toString());
         }
         //send the end of the list
-        out.println("end");
         Utils.p("List of music sent");
+        out.println("end");
     }
 
     @Override

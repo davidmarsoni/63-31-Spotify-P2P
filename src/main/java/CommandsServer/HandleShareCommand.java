@@ -18,7 +18,10 @@ public class HandleShareCommand implements CommandServer {
             if(splitData[0].equals("file")){
                 MusicFile file = new MusicFile(storage.getClientAddress(), storage.getClientPort(), splitData[1], splitData[2]);
                 storage.addEntry(file);
+                out.println("Music file "+file.toString()+" added to the list of music");
                 out.println("end");
+
+                
             }else if(splitData[0].equals("playlist")){
                 
             }

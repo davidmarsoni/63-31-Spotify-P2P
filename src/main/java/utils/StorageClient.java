@@ -18,6 +18,8 @@ public class StorageClient {
     private Socket clientSocket;
     private Map<String, CommandClient> commands;
     private LinkedList<Entry> entries = new LinkedList<Entry>();
+    private BufferedReader in;
+    private PrintWriter out;
 
     private StorageClient() {
         try {
@@ -110,6 +112,14 @@ public class StorageClient {
 
     public void setClientSocket(Socket socket) {
         clientSocket = socket;
+        try {
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
     }
 
     public Map<String, CommandClient> getCommands() {
@@ -201,6 +211,37 @@ public class StorageClient {
     }
     public LinkedList<Entry> getSharedEntries() {
         return entries;
+    }
+
+    public void setSharedEntries(LinkedList<Entry> entries) {
+        this.entries = entries;
+    }
+
+    public BufferedReader getIn() {
+        try{
+            return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setIn(BufferedReader in) {
+        this.in = in;
+    }
+
+    public PrintWriter getOut() {
+        try {
+            return new PrintWriter(clientSocket.getOutputStream(), true);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setOut(PrintWriter out) {
+        this.out = out;
     }
 
 }

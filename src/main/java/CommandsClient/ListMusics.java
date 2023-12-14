@@ -15,17 +15,16 @@ public class ListMusics implements CommandClient{
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(storage.getClientSocket().getInputStream()));
             PrintWriter out = new PrintWriter(storage.getClientSocket().getOutputStream(), true);
+
             //send the command to the server
             out.println("listMusics");
             //listen the response from the server
             String response = "";
+            
             while (!(response = in.readLine()).equalsIgnoreCase("end")) {
                 System.out.println(response);
             }
-
-           //close the buffer and the print writer but keep the socket open
-              //in.close();
-                //out.close();
+            System.out.println("End of the list");
                 
         }catch (Exception e) {
             System.err.println("Error handling client connection");

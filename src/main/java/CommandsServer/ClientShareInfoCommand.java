@@ -29,7 +29,7 @@ public class ClientShareInfoCommand implements CommandServer {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'help'");
+        return "send the listening port and ip of the client to the server";
     }
     
 }

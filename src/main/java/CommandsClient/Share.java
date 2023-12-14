@@ -66,9 +66,6 @@ public class Share implements CommandClient{
                 System.out.println(response);
             
             }
-
-            in.close();
-            out.close();
         }catch (Exception e) {
             System.err.println("Error handling client connection");
             e.printStackTrace();
