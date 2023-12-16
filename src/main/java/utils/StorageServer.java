@@ -44,7 +44,7 @@ public class StorageServer {
         commands.put("share", new HandleShareCommand());
         commands.put("sendInfo", new ClientShareInfoCommand());
 
-        entries.add(new MusicFile("sss", 123, "sss", "sss"));
+        entries.add(new MusicFile("129.168.102.344", 64532, "Cave-v2.mp3", "Todo"));
     }
 
     public Socket getSrvSocket() {

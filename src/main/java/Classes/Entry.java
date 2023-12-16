@@ -2,10 +2,14 @@ package Classes;
 public abstract class Entry {
     private String ClientAdress;
     private int ClientPort;
+    private String name;
+    private String path;
 
-    public Entry(String ClientAdress, int ClientPort) {
+    public Entry(String ClientAdress, int ClientPort,String name,String path) {
         this.ClientAdress = ClientAdress;
         this.ClientPort = ClientPort;
+        this.name = name;
+        this.path = path;
     }
     
     public String getClientAdress() {
@@ -22,5 +26,21 @@ public abstract class Entry {
 
     public void setClientPort(int ClientPort) {
         this.ClientPort = ClientPort;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void getPath(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return this.path;
     }
 }

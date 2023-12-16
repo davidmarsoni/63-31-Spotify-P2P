@@ -16,6 +16,7 @@ public class Utils {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_DARK_PURPLE = "\u001B[38;5;54m";
 
     public static final String ANSI_BLACK_H = "\u001B[40m";
     public static final String ANSI_RED_H = "\u001B[41m";

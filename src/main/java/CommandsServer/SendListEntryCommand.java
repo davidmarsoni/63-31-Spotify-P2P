@@ -13,9 +13,12 @@ public class SendListEntryCommand implements CommandServer{
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
         Utils.p("["+storage.getSrvSocket().getInetAddress().getHostAddress()+":"+storage.getSrvSocket().getPort()+"] Sending list of music to client:" );
+        
         //for each entry send the data to the client
+        out.println(Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-24s", "peers IPs and port")+Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-20s", "file name"));
+        out.println(Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-24s", "------------------")+Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-20s", "---------"));
         for (Entry entry : storage.getEntries()) {
-            out.println(entry.toString());
+            out.println(Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-24s", entry.getClientAdress()+":"+entry.getClientPort())+Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-20s", entry.getName()));
         }
         //send the end of the list
         Utils.p("List of music sent");

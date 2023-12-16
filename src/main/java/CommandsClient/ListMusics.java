@@ -1,7 +1,11 @@
 package CommandsClient;
 
 import utils.StorageClient;
+import utils.Utils;
+
 import java.io.*;
+
+import javax.swing.text.Utilities;
 
 public class ListMusics implements CommandClient{
     private StorageClient storage = StorageClient.getInstance();
@@ -18,13 +22,15 @@ public class ListMusics implements CommandClient{
 
             //send the command to the server
             out.println("listMusics");
+            Utils.title("List of music from " + storage.getServerAddress() + ":" + storage.getServerPort(), Utils.ANSI_BLUE_H);
             //listen the response from the server
             String response = "";
             
             while (!(response = in.readLine()).equalsIgnoreCase("end")) {
                 System.out.println(response);
             }
-            System.out.println("End of the list");
+            Utils.p("");
+            Utils.p("End of the list");
                 
         }catch (Exception e) {
             System.err.println("Error handling client connection");

@@ -38,13 +38,16 @@ public class Help implements CommandClient {
             Utils.p(ANSI_BLUE + "| " + Utils.ANSI_WHITE + String.format("%-12s", "Command") + ANSI_BLUE +" | "+ ANSI_RESET  + String.format("%-68s", "Description"));
             Utils.p(ANSI_BLUE + "| " + Utils.ANSI_WHITE + String.format("%-12s", "-------") + ANSI_BLUE +" | "+ ANSI_RESET  + String.format("%-68s", "-----------"));
             Map<String, CommandClient> sortedCommands = new TreeMap<>(commands);
+
             for (Map.Entry<String, CommandClient> entry : sortedCommands.entrySet()) {
                 String key = entry.getKey();
                 CommandClient value = entry.getValue();
                 String[] helpLines = value.help().split("\n");
-                for (String line : helpLines) {
-                    Utils.p(ANSI_BLUE + "| " + Utils.ANSI_WHITE + String.format("%-12s", key) + ANSI_BLUE +" | "+ ANSI_RESET  + String.format("%-68s", line));
-                }          
+                Utils.p(ANSI_BLUE + "| " + Utils.ANSI_WHITE + String.format("%-12s", key) + ANSI_BLUE +" | "+ ANSI_RESET  + String.format("%-68s", helpLines[0]));
+                for (int i = 1; i < helpLines.length; i++) {
+                    Utils.p(ANSI_BLUE + "| " + Utils.ANSI_WHITE +String.format("%-12s", "he") + ANSI_BLUE +" | "+ ANSI_RESET  + String.format("%-68s", helpLines[i]));
+                    key = "";
+                }      
             }
             Utils.p("");
             

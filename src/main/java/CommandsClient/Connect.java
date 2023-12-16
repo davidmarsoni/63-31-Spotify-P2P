@@ -39,7 +39,7 @@ public class Connect implements CommandClient {
             out.println("sendInfo");
             out.println(storage.getClientAddress()+" "+storage.getClientPort());
 
-            System.out.println("Connected to " + serverAddress);
+            System.out.println("Connected to " + serverAddress.getHostAddress()+":"+serverPort);
         } catch (UnknownHostException e) {
             System.err.println("Unknown host: " + serverName);
         } catch (ConnectException e) {
@@ -51,7 +51,7 @@ public class Connect implements CommandClient {
 
     @Override
     public String help() {
-        return "Connect to a server with " + Utils.ANSI_BLUE + storage.getServerAddress() + Utils.ANSI_RESET + ":" + Utils.ANSI_BLUE + storage.getServerPort() + Utils.ANSI_RESET + " as default (you can change it with the command "+Utils.ANSI_YELLOW+"init"+Utils.ANSI_RESET+")";
+        return "Connect to the current server in parametter " + Utils.ANSI_DARK_PURPLE + storage.getServerAddress() + Utils.ANSI_RESET + ":" + Utils.ANSI_DARK_PURPLE + storage.getServerPort() + Utils.ANSI_RESET + " (you can change it with the command "+Utils.ANSI_YELLOW+"init"+Utils.ANSI_RESET+")";
     }
 }
 

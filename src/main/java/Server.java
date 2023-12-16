@@ -97,7 +97,8 @@ public class Server {
                         }
 
                     } catch (Exception e) {
-                        System.out.println("Error creating input/output stream");
+                        
+                        Utils.title("Client :"+storage.getSrvSocket().getInetAddress().getHostAddress()+":"+storage.getSrvSocket().getPort()+" disconnected",Utils.ANSI_RED_H);
                     }
 
                 }).start();
