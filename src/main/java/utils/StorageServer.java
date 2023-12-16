@@ -10,6 +10,7 @@ import Classes.MusicFile;
 import CommandsServer.ClientShareInfoCommand;
 import CommandsServer.CommandServer;
 import CommandsServer.HandleShareCommand;
+import CommandsServer.HandleUnShareCommand;
 import CommandsServer.HelpCommand;
 import CommandsServer.SendListEntryCommand;
 
@@ -40,8 +41,9 @@ public class StorageServer {
     private void initCommands(){
         commands = new HashMap<>();
         commands.put("help", new HelpCommand());
-        commands.put("listMusics", new SendListEntryCommand());
+        commands.put("list", new SendListEntryCommand());
         commands.put("share", new HandleShareCommand());
+        commands.put("unshare", new HandleUnShareCommand());
         commands.put("sendInfo", new ClientShareInfoCommand());
 
         entries.add(new MusicFile("129.168.102.344", 64532, "Cave-v2.mp3", "Todo"));

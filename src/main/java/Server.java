@@ -2,10 +2,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import Classes.Entry;
-import Classes.MusicFile;
-import Classes.PlayList;
-import CommandsClient.CommandClient;
 import CommandsServer.CommandServer;
 import utils.*;
 
@@ -50,7 +46,7 @@ public class Server {
             Utils.title("Server Started", Utils.ANSI_GREEN_H);
 
             System.out.println("Default Timeout   : " + mySkServer.getSoTimeout());
-            System.out.println("Used IpAddress    : " + mySkServer.getInetAddress());
+            System.out.println("Used IpAddress    : " + mySkServer.getInetAddress().getHostAddress());
             System.out.println("Listening to Port : " + mySkServer.getLocalPort());
         } catch (Exception e) {
             System.err.println("Error initializing server");
@@ -107,22 +103,6 @@ public class Server {
                 System.err.println("No client connection durrint this wait time");
             }
         }
-    }
-
-    private static void downloadFile(String argument, PrintWriter out) {
-        //
-    }
-
-    private static void getListMusics(PrintWriter out) {
-        Utils.p("Sending list of music to client:" + storage.getSrvSocket().getInetAddress() + ":"
-                + storage.getSrvSocket().getPort());
-        // for each entry send the data to the client
-        for (Entry entry : storage.getEntries()) {
-            out.println(entry.toString());
-        }
-        // send the end of the list
-        out.println("end");
-        Utils.p("List of music sent");
     }
 
     public static void chat(BufferedReader in, PrintWriter out) {

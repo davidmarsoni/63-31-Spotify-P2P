@@ -1,19 +1,19 @@
 package CommandsClient;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ConnectException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.io.*;
+import java.net.*;
+import utils.*;
 
-import utils.StorageClient;
-import utils.Utils;
-
+/**
+ * Connect Command
+ * This command is used to connect to the server with the current configuration
+ * (server address and port)
+ */
 public class Connect implements CommandClient {
+    // get the instance of the storage to get the data
     private StorageClient storage = StorageClient.getInstance();
+
+    // server address and port just to have a shorter name
     private String serverName;
     private int serverPort;
 
@@ -22,24 +22,26 @@ public class Connect implements CommandClient {
 
     @Override
     public void execute(String argument) {
+        // get the server address and port from the storage
         this.serverName = storage.getServerAddress();
         this.serverPort = storage.getServerPort();
+        // inform the user that the client is trying to connect to the server
         System.out.println("Try to establish a connection to " + serverName + ":" + serverPort);
+
+        // try to connect to the server
         try {
-            
             InetAddress serverAddress = InetAddress.getByName(serverName);
             Socket clientSocket = new Socket(serverAddress, serverPort);
 
+            // set the client socket in the storage
             storage.setClientSocket(clientSocket);
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(storage.getClientSocket().getInputStream()));
+            // set info to the server on with port the client is listening
             PrintWriter out = new PrintWriter(storage.getClientSocket().getOutputStream(), true);
-
-            //send listening port and ip of the client to the server
             out.println("sendInfo");
-            out.println(storage.getClientAddress()+" "+storage.getClientPort());
+            out.println(storage.getClientAddress() + " " + storage.getClientPort());
 
-            System.out.println("Connected to " + serverAddress.getHostAddress()+":"+serverPort);
+            System.out.println("Connected to " + serverAddress.getHostAddress() + ":" + serverPort);
         } catch (UnknownHostException e) {
             System.err.println("Unknown host: " + serverName);
         } catch (ConnectException e) {
@@ -51,7 +53,10 @@ public class Connect implements CommandClient {
 
     @Override
     public String help() {
-        return "Connect to the current server in parametter " + Utils.ANSI_DARK_PURPLE + storage.getServerAddress() + Utils.ANSI_RESET + ":" + Utils.ANSI_DARK_PURPLE + storage.getServerPort() + Utils.ANSI_RESET + " (you can change it with the command "+Utils.ANSI_YELLOW+"init"+Utils.ANSI_RESET+")";
+        return "Connect to the current server in parametter " +
+                Utils.colorize(storage.getServerAddress(), Utils.ANSI_DARK_PURPLE) +
+                ":" +
+                Utils.colorize(String.valueOf(storage.getServerPort()), Utils.ANSI_DARK_PURPLE) +
+                " (you can change it with the command " + Utils.colorize("init", Utils.ANSI_YELLOW) + ")";
     }
 }
-

@@ -7,7 +7,7 @@ import Classes.Entry;
 import Classes.MusicFile;
 import utils.Utils;
 
-public class HandleShareCommand implements CommandServer {
+public class HandleUnShareCommand implements CommandServer {
     private utils.StorageServer storage = utils.StorageServer.getInstance();
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
@@ -18,25 +18,22 @@ public class HandleShareCommand implements CommandServer {
             String[] splitData = data.split(" ");
             //if the type is a file
             if(splitData[0].equals("file")){
-
-                MusicFile file = new MusicFile(storage.getClientAddress(), storage.getClientPort(), splitData[1], splitData[2]);
-                //test if the file already exist in the list of music (same name and same path) 
+                //test if the file already exist in the list of music (same name and same path) if yes remove it 
                 //test for the music file name and path
                 for (Entry entry : storage.getEntries()) {
-                    if(entry.getName().equals(file.getName()) && entry.getPath().equals(file.getPath()) && entry.getClientAdress().equals(file.getClientAdress()) && entry.getClientPort() == file.getClientPort()){
-                        out.println("The file "+Utils.ANSI_GREEN+ file.getName()+Utils.ANSI_RESET+" already exist in the list of music on the server");
-                        
+                    if(entry.getName().equals(splitData[1]) && entry.getPath().equals(splitData[2]) && entry.getClientAdress().equals(storage.getClientAddress()) && entry.getClientPort() == storage.getClientPort()){
+                        out.println("Music file "+Utils.ANSI_GREEN+ entry.getName()+Utils.ANSI_RESET+" removed from the list of music");
                         out.println("end");
+                        //remove the file from the list of music
+                        storage.removeEntry(entry);
                         return;
                     }
                 }
-                out.println("Music file "+Utils.ANSI_GREEN+ file.getName()+Utils.ANSI_RESET+" added to the list of music");
-                out.println("end");
-                //add the file to the list of music
-                storage.addEntry(file);
-                
+             
+                out.println("The file "+Utils.ANSI_GREEN+ splitData[1]+Utils.ANSI_RESET+" doesn't exist in the list of music on the server");
+
             }else if(splitData[0].equals("playlist")){
-                //TODO : handle the share of a playlist
+                //TODO : handle the unshare of a playlist
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,7 +43,7 @@ public class HandleShareCommand implements CommandServer {
 
     @Override
     public String help() {
-       return "Handle the complete share of a file or a playlist to the sever from a client";
+       return "Handle the complete unshare of a file or a playlist to the sever from a client";
     }
     
 }

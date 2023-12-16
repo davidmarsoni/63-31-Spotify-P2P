@@ -9,6 +9,7 @@ import utils.Utils;
 /**
  * Help command
  * This command display the list of all the commands available or a specific command
+ * This command is only use for debug purpose so it is not possible to write this command on the server console
  */
 public class HelpCommand implements CommandServer {
     private StorageServer storage = StorageServer.getInstance(); // Storage of the client

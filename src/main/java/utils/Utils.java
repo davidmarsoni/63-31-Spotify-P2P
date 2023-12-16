@@ -30,28 +30,33 @@ public class Utils {
     public static final String[] COLORS = {ANSI_BLACK, ANSI_RED, ANSI_GREEN, ANSI_YELLOW, ANSI_BLUE, ANSI_PURPLE, ANSI_CYAN, ANSI_WHITE};
     public static final String START_MESSAGE_WELCOME = "Welcome on spotify p2p please write "+ANSI_YELLOW +"help"+ANSI_RESET +" to see all the command \n";
 
+    private static final Random rand = new Random();
+
     public static void renderStart(boolean isServer) {
-        Random rand = new Random();
         String START_MESSAGE_LOGO = loadFile("src/main/resources/logo.txt");
+        StringBuilder coloredLogo = new StringBuilder();
         for (char c : START_MESSAGE_LOGO.toCharArray()) {
             // Generate a random color
-             String color = COLORS[rand.nextInt(COLORS.length)];
-            // Print the character with the color
-            System.out.print(color + c + ANSI_RESET);
+            String color = COLORS[rand.nextInt(COLORS.length)];
+            // Append the character with the color to the StringBuilder
+            coloredLogo.append(color).append(c).append(ANSI_RESET);
         }
-        System.out.println();
+        // Print the colored logo
+        System.out.println(coloredLogo);
+        
         if (isServer) {
             System.out.println(loadFile("src/main/resources/server.txt"));
         } else {
             System.out.println(loadFile("src/main/resources/client.txt"));
         }
+        
+        String version = loadFile("src/main/resources/version.txt");
         System.out.println();
         if(isServer){
-            System.out.println(loadFile("src/main/resources/version.txt")+" \n" + ANSI_RESET);
+            System.out.println(version + " \n" + ANSI_RESET);
         }else{
-            System.out.println(loadFile("src/main/resources/version.txt")+" \n\n"+START_MESSAGE_WELCOME + ANSI_RESET);
+            System.out.println(version + " \n\n" + START_MESSAGE_WELCOME + ANSI_RESET);
         }
-
     }
     
     public static String loadFile(String path) {
@@ -61,6 +66,10 @@ public class Utils {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    public static String colorize(String s,String color){
+        return color+s+ANSI_RESET;
     }
 
     public static void p(String State,String s) {
@@ -106,7 +115,8 @@ public class Utils {
                 System.out.println("Invalid type");
             }
         } while (!valid);
-
+        
+        sc.close();
         return type;
     }
 

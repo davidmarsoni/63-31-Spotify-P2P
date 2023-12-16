@@ -2,12 +2,11 @@ package utils;
 
 import java.io.*;
 import java.net.*;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
-import Classes.Entry;
+import Classes.*;
 import CommandsClient.*;
+import CommandsClient.List;
 
 public class StorageClient {
     private static StorageClient instance;
@@ -18,8 +17,6 @@ public class StorageClient {
     private Socket clientSocket;
     private Map<String, CommandClient> commands;
     private LinkedList<Entry> entries = new LinkedList<Entry>();
-    private BufferedReader in;
-    private PrintWriter out;
 
     private StorageClient() {
         try {
@@ -27,13 +24,13 @@ public class StorageClient {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-
         try {
             clientAddress = InetAddress.getByName("127.0.0.1");
         } catch (UnknownHostException e) {
             e.printStackTrace();
-        }   
+        }
     }
+
     public static StorageClient getInstance() {
         if (instance == null) {
             instance = new StorageClient();
@@ -76,7 +73,7 @@ public class StorageClient {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             save();
         }
         initCommands();
@@ -88,8 +85,9 @@ public class StorageClient {
         commands.put("help", new Help());
         commands.put("exit", new Exit());
         commands.put("init", new Init());
-        commands.put("listMusics", new ListMusics());
+        commands.put("list", new List());
         commands.put("share", new Share());
+        commands.put("unshare", new UnShare());
         commands.put("config", new Config());
         commands.put("test", new Test());
     }
@@ -103,8 +101,9 @@ public class StorageClient {
     }
 
     public Socket getClientSocket() {
-        if(clientSocket == null){
-            Utils.p("You are not connected to a server, please use the command "+Utils.ANSI_YELLOW+"connect"+Utils.ANSI_RESET+" to connect to a server");
+        if (clientSocket == null) {
+            Utils.p("You are not connected to a server, please use the command " + Utils.ANSI_YELLOW + "connect"
+                    + Utils.ANSI_RESET + " to connect to a server");
             return null;
         }
         return clientSocket;
@@ -112,14 +111,6 @@ public class StorageClient {
 
     public void setClientSocket(Socket socket) {
         clientSocket = socket;
-        try {
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
     }
 
     public Map<String, CommandClient> getCommands() {
@@ -153,7 +144,7 @@ public class StorageClient {
     }
 
     public void setClientPort(int clientPort) {
-        if(isValidPort(clientPort)){
+        if (isValidPort(clientPort)) {
             this.clientPort = clientPort;
         } else {
             System.out.println("Invalid port number");
@@ -173,7 +164,7 @@ public class StorageClient {
     }
 
     public void setServerPort(int serverPort) {
-        if(isValidPort(serverPort)){
+        if (isValidPort(serverPort)) {
             this.serverPort = serverPort;
         } else {
             System.out.println("Invalid port number");
@@ -196,19 +187,31 @@ public class StorageClient {
         }
     }
 
-    public void addSharedEntry(Entry entry){
+    public void addSharedEntry(Entry entry) {
+       //test if the entry is already in the list
+        for (Entry entry2 : entries) {
+            if(entry2.getName().equals(entry.getName()) && entry2.getPath().equals(entry.getPath())){
+                return;
+            }
+        }
         entries.add(entry);
     }
 
-    public void removeSharedEntry(Entry entry){
-        entries.remove(entry);
+    public void removeSharedEntry(Entry entry) {
+        for (Entry entry2 : entries) {
+            if(entry2.getName().equals(entry.getName()) && entry2.getPath().equals(entry.getPath())){
+                entries.remove(entry2);
+                return;
+            }
+        }
     }
 
-    public void listSharedEntries(){
+    public void listSharedEntries() {
         entries.forEach((entry) -> {
             Utils.p(entry.toString());
         });
     }
+
     public LinkedList<Entry> getSharedEntries() {
         return entries;
     }
@@ -216,32 +219,4 @@ public class StorageClient {
     public void setSharedEntries(LinkedList<Entry> entries) {
         this.entries = entries;
     }
-
-    public BufferedReader getIn() {
-        try{
-            return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void setIn(BufferedReader in) {
-        this.in = in;
-    }
-
-    public PrintWriter getOut() {
-        try {
-            return new PrintWriter(clientSocket.getOutputStream(), true);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void setOut(PrintWriter out) {
-        this.out = out;
-    }
-
 }

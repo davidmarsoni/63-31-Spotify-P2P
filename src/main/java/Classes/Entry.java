@@ -4,6 +4,7 @@ public abstract class Entry {
     private int ClientPort;
     private String name;
     private String path;
+    private boolean isAvalaible = true;
 
     public Entry(String ClientAdress, int ClientPort,String name,String path) {
         this.ClientAdress = ClientAdress;
@@ -42,5 +43,13 @@ public abstract class Entry {
 
     public String getPath() {
         return this.path;
+    }
+
+    public boolean isAvalaible() {
+        return this.isAvalaible;
+    }
+
+    public void setAvalaible(boolean isAvalaible) {
+        this.isAvalaible = isAvalaible;
     }
 }
