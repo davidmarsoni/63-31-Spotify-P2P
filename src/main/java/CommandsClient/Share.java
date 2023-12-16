@@ -1,12 +1,6 @@
 package CommandsClient;
 
 import utils.*;
-import java.io.*;
-import java.util.ArrayList;
-
-import Classes.MusicFile;
-import Classes.PlayList;
-
 public class Share implements CommandClient{
     @Override
     public void execute(String argument) {

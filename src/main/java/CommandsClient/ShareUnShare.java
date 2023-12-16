@@ -81,8 +81,9 @@ public class ShareUnShare implements CommandClient {
             data = "playlist "+playList.getName()+" "+playList.getPath();
 
             for (String musicFile : musicFiles) {
-                data += " "+musicFile;
+                data += " "+musicFile +" next";
             }
+            data += " end";
         }
         
         try {
@@ -113,7 +114,7 @@ public class ShareUnShare implements CommandClient {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("This command is a superCommand and doesn't have a help method it juste there to avoid code duplication");
+        throw new UnsupportedOperationException("This command is a superCommand and doesn't have a help method it just there to avoid code duplication");
     }
     
 }

@@ -16,6 +16,7 @@ public class StorageClient {
     private int clientPort = 40000;
     private Socket clientSocket;
     private Map<String, CommandClient> commands;
+    private Map<String, CommandListeningClient> listeningCommands;
     private LinkedList<Entry> entries = new LinkedList<Entry>();
 
     private StorageClient() {
