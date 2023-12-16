@@ -15,6 +15,7 @@ public class ShareUnShare implements CommandClient {
     private StorageClient storage = StorageClient.getInstance();
     private String type = "";
     private String data = "";
+    private boolean isFile = true;
     
     public ShareUnShare(String Type) {
         this.type = Type;
@@ -39,7 +40,28 @@ public class ShareUnShare implements CommandClient {
         }
         
         String args[] = argument.split(" ");
-        if(args.length == 1){
+     
+        if(argument.contains("\"")){
+            //find the index of the first "
+            int index = argument.indexOf("\"");
+            //find the index of the second "
+            int index2 = argument.indexOf("\"",index+1);
+            //get the substring between the two "
+            args[0] = argument.substring(index+1,index2);
+
+             if(args[0].contains(".")){
+                isFile = true;
+            }else{
+                isFile = false;
+                args[1] = argument.substring(index2+1);
+            }
+        }
+
+        //test if the argument is a file or a folder
+       
+
+
+        if(isFile){
             File file = new File(args[0]);
             //test if the file exist
             if(!file.exists()){
@@ -54,9 +76,9 @@ public class ShareUnShare implements CommandClient {
                 storage.removeSharedEntry(musicFile);
             }
 
-            data = "file "+musicFile.getName()+" "+musicFile.getPath();
+            data = "file#"+musicFile.getName()+"#"+musicFile.getPath();
            
-        }else if(args.length == 2){
+        }else{
             ArrayList<String> musicFiles = new ArrayList<String>();
             File folder = new File(args[0]);
             File[] listOfFiles = folder.listFiles();
@@ -71,19 +93,18 @@ public class ShareUnShare implements CommandClient {
                 }
             }
             //create the playlist
-            PlayList playList = new PlayList(storage.getClientAddress(),storage.getClientPort(),args[0],args[1],musicFiles);
+            PlayList playList = new PlayList(storage.getClientAddress(),storage.getClientPort(),args[0].trim(),args[1],musicFiles);
             if(type.equals("share")){
                 storage.addSharedEntry(playList);
             }else if(type.equals("unshare")){
                 storage.removeSharedEntry(playList);
             }
 
-            data = "playlist "+playList.getName()+" "+playList.getPath();
+            data = "playlist#"+playList.getName()+"#"+playList.getPath();
 
             for (String musicFile : musicFiles) {
-                data += " "+musicFile +" next";
+                data += "#"+musicFile;
             }
-            data += " end";
         }
         
         try {

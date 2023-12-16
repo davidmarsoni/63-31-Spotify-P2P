@@ -12,6 +12,9 @@ public class Test implements CommandClient {
     private StorageClient storage = StorageClient.getInstance();
     @Override
     public void execute(String argument) {
+        if(storage.getClientSocket()==null){
+            return;
+        }
         //send a test message to the server
         System.out.println("Test command executed");
          try {

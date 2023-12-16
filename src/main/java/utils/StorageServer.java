@@ -117,7 +117,6 @@ public class StorageServer {
         try {
             this.clientAddress = InetAddress.getByName(clientAddress);
         } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

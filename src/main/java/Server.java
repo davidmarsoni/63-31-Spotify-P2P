@@ -88,13 +88,14 @@ public class Server {
                                         "Command not found " + Utils.ANSI_BLUE + command + Utils.ANSI_RESET);
                                 // respond to the client
                                 out.println("Command not found " + Utils.ANSI_BLUE + command + Utils.ANSI_RESET);
+                                out.println("end");
                             }
                             
                         }
 
                     } catch (Exception e) {
-                        
                         Utils.title("Client :"+storage.getSrvSocket().getInetAddress().getHostAddress()+":"+storage.getSrvSocket().getPort()+" disconnected",Utils.ANSI_RED_H);
+                    
                     }
 
                 }).start();

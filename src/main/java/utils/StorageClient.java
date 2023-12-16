@@ -91,6 +91,8 @@ public class StorageClient {
         commands.put("unshare", new UnShare());
         commands.put("config", new Config());
         commands.put("test", new Test());
+
+
     }
 
     public String getServerAddress() {
@@ -120,6 +122,14 @@ public class StorageClient {
 
     public void setCommands(Map<String, CommandClient> commands) {
         this.commands = commands;
+    }
+
+    public Map<String, CommandListeningClient> getListeningCommands() {
+        return listeningCommands;
+    }
+
+    public void setListeningCommands(Map<String, CommandListeningClient> listeningCommands) {
+        this.listeningCommands = listeningCommands;
     }
 
     private static final String IP_ADDRESS_REGEX = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])(\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])){3}$";
@@ -220,4 +230,6 @@ public class StorageClient {
     public void setSharedEntries(LinkedList<Entry> entries) {
         this.entries = entries;
     }
+
+    
 }

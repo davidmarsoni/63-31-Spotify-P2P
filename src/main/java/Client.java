@@ -40,7 +40,6 @@ public class Client {
                         String command = words[0];
                         String argument = words.length > 1 ? words[1] : null;
                         // System.out.println("Command: " + command + " Argument: " + argument);
-
                         CommandClient cmd = commands.get(command);
                         if (cmd != null) {
                             cmd.execute(argument);
