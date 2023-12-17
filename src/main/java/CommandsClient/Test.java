@@ -16,8 +16,8 @@ public class Test implements CommandClient {
             return;
         }
         //send a test message to the server
-        System.out.println("Test command executed");
-         try {
+        System.out.println("Disconnect form the server");
+        try {
             BufferedReader in = new BufferedReader(new InputStreamReader(storage.getClientSocket().getInputStream()));
             PrintWriter out = new PrintWriter(storage.getClientSocket().getOutputStream(), true);
             //send the command to the server

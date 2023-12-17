@@ -1,8 +1,17 @@
 package utils;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.*;
 import java.util.*;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 import Classes.*;
 import CommandsClient.*;
@@ -42,11 +51,17 @@ public class StorageClient {
 
     public void save() {
         try {
-            PrintWriter writer = new PrintWriter("storage.txt");
-            writer.println(serverAddress.getHostAddress());
-            writer.println(serverPort);
-            writer.println(clientAddress.getHostAddress());
-            writer.println(clientPort);
+            PrintWriter writer = new PrintWriter("storageClient.json");
+            Gson gson = new Gson();
+            //create a object to store the data
+            ClientData client = new ClientData();
+            client.clientAddress = clientAddress;
+            client.clientPort = clientPort;
+            client.serverAddress = serverAddress;
+            client.serverPort = serverPort;
+            client.entries = entries;
+            String json = gson.toJson(client);
+            writer.println(json);
             writer.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -54,23 +69,35 @@ public class StorageClient {
     }
 
     public void load() {
-        File file = new File("storage.txt");
+        File file = new File("storageClient.json");
         if (file.exists()) {
             try {
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                try {
-                    this.serverAddress = InetAddress.getByName(reader.readLine());
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
-                this.serverPort = Integer.parseInt(reader.readLine());
-                try {
-                    this.clientAddress = InetAddress.getByName(reader.readLine());
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
-                this.clientPort = Integer.parseInt(reader.readLine());
-                reader.close();
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String json = br.readLine();
+                //create a gson object and handle abstract class for that there is a type field in the json for the Entry object
+                Gson gson = new GsonBuilder().registerTypeAdapter(Entry.class, new JsonDeserializer<Entry>() {
+                    @Override
+                    public Entry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                        JsonObject jsonObject = json.getAsJsonObject();
+                        String type = jsonObject.get("type").getAsString();
+                        if (type.equals("musicFile")) {
+                            return context.deserialize(jsonObject, MusicFile.class);
+                        } else if (type.equals("playList")) {
+                            return context.deserialize(jsonObject, PlayList.class);
+                        }
+                        return null;
+                    }
+                }).create();
+                ClientData client = gson.fromJson(json, ClientData.class);
+                //set the data to the storage
+                clientAddress = client.clientAddress;
+                clientPort = client.clientPort;
+                serverAddress = client.serverAddress;
+                serverPort = client.serverPort;
+                entries = client.entries;
+                br.close();
+
+                // create a 
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -91,6 +118,7 @@ public class StorageClient {
         commands.put("unshare", new UnShare());
         commands.put("config", new Config());
         commands.put("test", new Test());
+        commands.put("disconnect", new Disconnect());
 
 
     }
@@ -104,8 +132,12 @@ public class StorageClient {
     }
 
     public Socket getClientSocket() {
-        if (clientSocket == null) {
-            Utils.p("You are not connected to a server, please use the command " + Utils.ANSI_YELLOW + "connect"
+        return getClientSocket(true);
+    }
+
+    public Socket getClientSocket(Boolean print) {
+        if (clientSocket == null && print) {
+            System.out.println("You are not connected to a server, please use the command " + Utils.ANSI_YELLOW + "connect"
                     + Utils.ANSI_RESET + " to connect to a server");
             return null;
         }
@@ -218,9 +250,15 @@ public class StorageClient {
     }
 
     public void listSharedEntries() {
-        entries.forEach((entry) -> {
-            Utils.p(entry.toString());
-        });
+        StringBuilder sb = new StringBuilder();
+        for (Object entry : entries) {
+            sb.append(entry.toString()).append(" , ");
+        }
+        // Remove the last comma and space
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 2);
+        }
+        System.out.println(sb.toString());
     }
 
     public LinkedList<Entry> getSharedEntries() {

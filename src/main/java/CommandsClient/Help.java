@@ -39,10 +39,10 @@ public class Help implements CommandClient {
             Utils.title("Help");
 
             // print the table
-            Utils.p(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", "Command"), WHITE)
+            System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", "Command"), WHITE)
                     + Utils.colorize(" | ", BLUE)
                     + String.format("%-68s", "Description"));
-            Utils.p(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", "-------"), WHITE)
+            System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", "-------"), WHITE)
                     + Utils.colorize(" | ", BLUE)
                     + String.format("%-68s", "-----------"));
             Map<String, CommandClient> sortedCommands = new TreeMap<>(commands);
@@ -51,15 +51,15 @@ public class Help implements CommandClient {
                 String key = entry.getKey();
                 CommandClient value = entry.getValue();
                 String[] helpLines = value.help().split("\n");
-                Utils.p(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", key), WHITE)
+                System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", key), WHITE)
                         + Utils.colorize(" | ", BLUE) + String.format("%-68s", helpLines[0]));
                 for (int i = 1; i < helpLines.length; i++) {
-                    Utils.p(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", ""), WHITE)
+                    System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", ""), WHITE)
                             + Utils.colorize(" | ", BLUE) + String.format("%-68s", helpLines[i]));
                     key = "";
                 }
             }
-            Utils.p("");
+            System.out.println("");
 
         } else {
             // get the command from the argument
@@ -68,10 +68,10 @@ public class Help implements CommandClient {
             // error message
             if (cmd != null) {
                 Utils.title("Help " + argument);
-                Utils.p(cmd.help());
-                Utils.p("");
+                System.out.println(cmd.help());
+                System.out.println("");
             } else {
-                Utils.p("Command not found " + Utils.colorize(argument, Utils.ANSI_YELLOW));
+                System.out.println("Command not found " + Utils.colorize(argument, Utils.ANSI_YELLOW));
             }
         }
 

@@ -4,8 +4,10 @@ public abstract class Entry {
     private int ClientPort;
     private String name;
     private String path;
-    private boolean isAvalaible = true;
+    private boolean isAvailable = true;
 
+    public Entry() {
+    }
     public Entry(String ClientAdress, int ClientPort,String name,String path) {
         this.ClientAdress = ClientAdress;
         this.ClientPort = ClientPort;
@@ -45,11 +47,11 @@ public abstract class Entry {
         return this.path;
     }
 
-    public boolean isAvalaible() {
-        return this.isAvalaible;
+    public boolean isAvailable() {
+        return this.isAvailable;
     }
-
-    public void setAvalaible(boolean isAvalaible) {
-        this.isAvalaible = isAvalaible;
+             
+    public void setAvailable(boolean isAvalaible) {
+        this.isAvailable = isAvalaible;
     }
 }

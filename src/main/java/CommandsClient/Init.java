@@ -27,7 +27,7 @@ public class Init implements CommandClient {
 
         // loop until the user enter a valid ip address
         serverName = Utils.ask("Server address", serverName, "^([0-9]{1,3}\\.){3}[0-9]{1,3}$", serverName, true);
-        Utils.p(serverName);
+        System.out.println(serverName);
         // I know that there is better way to do it with if else but i would like to use
         // the Utils.ask method and note devlop a new one just for this
         String tmpServerPort = Utils.ask("Server port", String.valueOf(serverPort),
@@ -39,11 +39,11 @@ public class Init implements CommandClient {
         storage.setServerAddress(serverName);
         storage.setServerPort(serverPort);
 
-        Utils.p("");
-        Utils.p("New server address and port saved");
-        Utils.p("Server : " + Utils.colorize(storage.getServerAddress(), Utils.ANSI_DARK_PURPLE) + ":"
+        System.out.println("");
+        System.out.println("New server address and port saved");
+        System.out.println("Server : " + Utils.colorize(storage.getServerAddress(), Utils.ANSI_DARK_PURPLE) + ":"
                 + Utils.colorize(String.valueOf(storage.getServerPort()), Utils.ANSI_DARK_PURPLE));
-        Utils.p("");
+        System.out.println("");
     }
 
     /**

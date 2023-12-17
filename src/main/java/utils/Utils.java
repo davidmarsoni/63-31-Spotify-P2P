@@ -72,17 +72,11 @@ public class Utils {
         return color+s+ANSI_RESET;
     }
 
-    public static void p(String State,String s) {
-        System.out.println(State + " > " + s);
-    }
-    public static void p(String s) {
-        System.out.println(s);
-    }
 
     public static void title(String title,String color) {
-        p("");
-        p(color + " " + title + " " + ANSI_RESET);
-        p("");
+        System.out.println("");
+        System.out.println(color + " " + title + " " + ANSI_RESET);
+        System.out.println("");
     }
 
     public static void title(String title) {
@@ -92,8 +86,8 @@ public class Utils {
     public static void titleDesc(String title,String desc) {
         title(title);
         if(desc != null){
-            p(desc);
-            p("");
+            System.out.println(desc);
+            System.out.println("");
         }
     }
 

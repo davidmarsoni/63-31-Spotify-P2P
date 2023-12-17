@@ -12,20 +12,20 @@ public class Config implements CommandClient {
     @Override
     public void execute(String argument) {
         Utils.titleDesc("Current config", "Display the configuration of the client");
-        Utils.p("Client : " +
-                Utils.colorize(storage.getClientAddress(), Utils.ANSI_BLUE) +
+        System.out.println("Me     : " +
+                Utils.colorize(storage.getClientAddress(), Utils.ANSI_DARK_PURPLE) +
                 ":" +
-                Utils.colorize(String.valueOf(storage.getClientPort()), Utils.ANSI_BLUE));
-        Utils.p("Server : " +
-                Utils.colorize(storage.getServerAddress(), Utils.ANSI_BLUE) +
+                Utils.colorize(String.valueOf(storage.getClientPort()), Utils.ANSI_DARK_PURPLE));
+        System.out.println("Server : " +
+                Utils.colorize(storage.getServerAddress(), Utils.ANSI_DARK_PURPLE) +
                 ":" +
-                Utils.colorize(String.valueOf(storage.getServerPort()), Utils.ANSI_BLUE));
+                Utils.colorize(String.valueOf(storage.getServerPort()), Utils.ANSI_DARK_PURPLE));
 
         // list all the entries shared by the client
         if (storage.getSharedEntries().isEmpty()) {
-            Utils.p("No shared entries");
+            System.out.println("No shared entries");
         } else {
-            Utils.p("Shared entries : ");
+            System.out.println("Shared entries : ");
             storage.listSharedEntries();
         }
     }

@@ -1,6 +1,9 @@
 package CommandsClient;
 
+
+
 import utils.StorageClient;
+import utils.Utils;
 
 /**
  * Exit command
@@ -12,7 +15,13 @@ public class Exit implements CommandClient {
     public Exit() {}
     @Override
     public void execute(String argument) {
-        storage.save();
+        System.out.println("Exiting the program ...");
+        storage.save(); 
+        System.out.println("The data of the client has been saved");
+
+        //run the disconnect command to inform the server that the client is leaving the network
+        Disconnect disconnect = new Disconnect();
+        disconnect.execute(argument);
         //TODO : inform the server that the client is leaving the network and also rework the client and server save methods
         System.exit(0);
     }

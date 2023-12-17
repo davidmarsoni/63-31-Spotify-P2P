@@ -11,6 +11,11 @@ public class List implements CommandClient{
     private StorageClient storage = StorageClient.getInstance();
     @Override
     public void execute(String argument) {
+
+        if(argument != null) {
+            // TODO : allow the user to list a specific music or playlist with all the information
+        }
+
         //check if the client is connected to the server
         if(storage.getClientSocket() == null) {
             return;
@@ -34,8 +39,8 @@ public class List implements CommandClient{
             while (!(response = in.readLine()).equalsIgnoreCase("end")) {
                 System.out.println(response);
             }
-            Utils.p("");
-            Utils.p("End of the list");
+            System.out.println("");
+            System.out.println("End of the list");
                 
         }catch (Exception e) {
             System.err.println("Error handling client connection");

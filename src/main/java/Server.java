@@ -95,7 +95,7 @@ public class Server {
 
                     } catch (Exception e) {
                         Utils.title("Client :"+storage.getSrvSocket().getInetAddress().getHostAddress()+":"+storage.getSrvSocket().getPort()+" disconnected",Utils.ANSI_RED_H);
-                    
+                        storage.updateClientEntry(false);
                     }
 
                 }).start();
