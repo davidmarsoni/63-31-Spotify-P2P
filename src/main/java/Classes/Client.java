@@ -14,6 +14,15 @@ public class Client {
         this.ClientPort = ClientPort;
     }
 
+    public Client(String ClientAdress, int ClientPort) {
+        try{
+            this.ClientAdress = InetAddress.getByName(ClientAdress);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        this.ClientPort = ClientPort;
+    }
+
     public InetAddress getClientAdress() {
         return this.ClientAdress;
     }

@@ -27,7 +27,7 @@ public class HandleShareUnShare implements CommandServer {
             String[] splitData = data.split("#");
             // if the type is a file
             if (splitData[0].equals("file")) {
-                MusicFile file = new MusicFile(storage.getClientAddress(), storage.getClientPort(), splitData[1],
+                MusicFile file = new MusicFile(storage.getCurrentClientAddress(), storage.getCurrentClientPort(), splitData[1],
                         splitData[2]);
                 // test if the file already exist in the list of music (same name and same path)
                 // test for the music file name and path
@@ -73,14 +73,14 @@ public class HandleShareUnShare implements CommandServer {
                     musicFiles.add(musicFileData);
                 }
                 //create the playlist
-                PlayList playlist = new PlayList(storage.getClientAddress(), storage.getClientPort(), playlistPath,
+                PlayList playlist = new PlayList(storage.getCurrentClientAddress(), storage.getCurrentClientPort(), playlistPath,
                         playlistName, musicFiles);
 
                 //test if the playlist already exist in the list of music (same name and same path)
                 for (Entry entry : storage.getEntries()) {
                     if (entry.getName().equals(playlistName) && entry.getPath().equals(playlistPath)
-                            && entry.getClientAdress().equals(storage.getClientAddress())
-                            && entry.getClientPort() == storage.getClientPort()) {
+                            && entry.getClientAdress().equals(storage.getCurrentClientAddress())
+                            && entry.getClientPort() == storage.getCurrentClientPort()) {
                         if (type.equals("share")) {
                             out.println("The playlist " + Utils.colorize(playlistName, Utils.ANSI_GREEN)
                                     + " already exist in the list of music on the server");

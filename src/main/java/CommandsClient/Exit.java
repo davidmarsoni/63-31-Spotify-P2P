@@ -3,7 +3,6 @@ package CommandsClient;
 
 
 import utils.StorageClient;
-import utils.Utils;
 
 /**
  * Exit command

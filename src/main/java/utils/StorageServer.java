@@ -3,7 +3,6 @@ package utils;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.*;
 
 import Classes.Client;
@@ -17,19 +16,21 @@ import CommandsServer.HandleUnShareCommand;
 import CommandsServer.HelpCommand;
 import CommandsServer.SendListEntryCommand;
 
-//TODO : do the storage in json for the server
 public class StorageServer {
     private static StorageServer instance = null;
-    private Socket srvSocket = null;
     private InetAddress localAddress = null;
-    private ServerSocket mySkServer;
     private String interfaceName = "eth1";
     private int port = 45000;
+    private ServerSocket mySkServer;
+   
+
     private LinkedList<Entry> entries = new LinkedList<Entry>();
-    private Map<String,CommandServer> commands ;
-    private InetAddress clientAddress;
-    private int clientPort = 40000;
     private LinkedList<Client> clients = new LinkedList<Client>();
+    private Map<Integer,ServerThreadData> serverThreadDatas = new HashMap<>();
+    private Map<String,CommandServer> commands ;
+
+
+    private Socket srvSocket = null;
 
     private StorageServer() {
         // private constructor to prevent instantiation
@@ -115,31 +116,10 @@ public class StorageServer {
         this.commands = commands;
     }
 
-    public String getClientAddress() {
-        return clientAddress.getHostAddress();
-    }
-
-    public void setClientAddress(String clientAddress) {
-        try {
-            this.clientAddress = InetAddress.getByName(clientAddress);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public int getClientPort() {
-        return clientPort;
-    }
-
-    public void setClientPort(int clientPort) {
-        this.clientPort = clientPort;
-       
-    }
-
     public void updateClientEntry(Boolean isAvailable) {
         // each entry that have the current client address and port will be updated to be alvailable
         for (Entry entry : entries) {
-            if (entry.getClientAdress().equals(clientAddress.getHostAddress()) && entry.getClientPort() == clientPort) {
+            if (entry.getClientAdress().equals(getCurrentServerThreadsData().getClientAddress().getHostAddress()) && entry.getClientPort() == getCurrentServerThreadsData().getClientPort()) {
                 entry.setAvailable(isAvailable);
             }
         }
@@ -167,11 +147,55 @@ public class StorageServer {
         for (Client client2 : clients) {
             if (client2.getClientAdress().equals(client.getClientAdress()) && client2.getClientPort() == client.getClientPort()) {
                 client2.setAvailable(client.isAvailable());
+                updateClientEntry(client.isAvailable());
+                return;
             }
         }
+        //if the client is not in the list we add it
+        addClient(client);
     }
     public LinkedList<Client> getClients() {
         return clients;
+    }
+
+    public void addServerThreadData(int id, ServerThreadData serverThreadData) {
+        serverThreadDatas.put(id, serverThreadData);
+    }
+
+    public void addServerThreadData(ServerThreadData serverThreadData) {
+        addServerThreadData(Thread.currentThread().hashCode(), serverThreadData);
+    }
+
+    public void removeServerThreadData(int id) {
+        serverThreadDatas.remove(id);
+    }
+
+    public Map<Integer, ServerThreadData> getServerThreadsDatas() {
+        return serverThreadDatas;
+    }
+
+    public ServerThreadData getCurrentServerThreadsData() {
+        return serverThreadDatas.get(Thread.currentThread().hashCode());
+    }
+
+    public String getCurrentClientAddress() {
+        return getCurrentServerThreadsData().getClientAddress().getHostAddress();
+    }
+
+    public int getCurrentClientPort() {
+        return getCurrentServerThreadsData().getClientPort();
+    }
+
+    public void setCurrentClientAddress(String clientAddress) {
+        getCurrentServerThreadsData().setClientAddress(clientAddress);
+    }
+
+    public void setCurrentClientPort(int clientPort) {
+        getCurrentServerThreadsData().setClientPort(clientPort);
+    }
+
+    public Socket getCurrentSocket() {
+        return getCurrentServerThreadsData().getSocket();
     }
 
 }

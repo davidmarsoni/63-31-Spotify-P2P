@@ -38,6 +38,7 @@ public class Server {
 
             // Warning: the backlog value (2nd parameter is handled by the implementation
             ServerSocket mySkServer = new ServerSocket(45000, 10, localAddress);
+            
             storage.setMySkServer(mySkServer);
             // set 3min timeout
             mySkServer.setSoTimeout(180000);
@@ -62,10 +63,12 @@ public class Server {
             try {
                 Socket srvSocket = storage.getMySkServer().accept();
 
-                storage.setSrvSocket(srvSocket);
-                System.out.println(
-                        "Connection accepted from " + storage.getSrvSocket().getInetAddress().getHostAddress());
                 new Thread(() -> {
+                    ServerThreadData serverThreadData = new ServerThreadData(srvSocket);
+                    storage.addServerThreadData(serverThreadData);
+                    storage.setSrvSocket(srvSocket);
+                    System.out.println(
+                        "Connection accepted from " + storage.getSrvSocket().getInetAddress().getHostAddress() + ":" + storage.getSrvSocket().getPort());
                     // listen command from client
                     try {
                         BufferedReader in = new BufferedReader(
@@ -94,7 +97,7 @@ public class Server {
                         }
 
                     } catch (Exception e) {
-                        Utils.title("Client :"+storage.getSrvSocket().getInetAddress().getHostAddress()+":"+storage.getSrvSocket().getPort()+" disconnected",Utils.ANSI_RED_H);
+                        Utils.title("Client :"+storage.getCurrentSocket().getInetAddress().getHostAddress()+":"+ storage.getCurrentSocket().getPort() + " disconnected", Utils.ANSI_RED_H);
                         storage.updateClientEntry(false);
                     }
 

@@ -2,7 +2,6 @@ package CommandsServer;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 
 import Classes.Client;
 import utils.StorageServer;
@@ -19,11 +18,11 @@ public class ClientShareInfoCommand implements CommandServer {
             String ip = data[0];
             int port = Integer.parseInt(data[1]);
             
-            storage.setClientAddress(ip);
-            storage.setClientPort(port);
+            storage.setCurrentClientAddress(ip);
+            storage.setCurrentClientPort(port);
             //TODO : add the client to the list of the clients
-            //update all the Entry of the client on the server
-            storage.updateClientEntry(true);
+            Client client = new Client(ip, port);
+            storage.updateClient(client);
 
             System.out.println("Client address for listening : " +Utils.ANSI_BLUE+ ip + Utils.ANSI_RESET+":" +Utils.ANSI_BLUE+ port + Utils.ANSI_RESET);
         } catch (Exception e) {
