@@ -1,1 +1,28 @@
-{"serverAddress":"127.0.0.1","serverPort":45000,"clientAddress":"127.0.0.1","clientPort":40000,"entries":[{"type":"musicFile","ClientAdress":"127.0.0.1","ClientPort":40000,"name":"cave-v2.mp3","path":"C:\\Users\\david\\Downloads\\cave-v2.mp3","isAvailable":true},{"MusicFiles":["dead.wav","dry-bones-death (1).mp3"],"type":"playList","ClientAdress":"127.0.0.1","ClientPort":40000,"name":"lol cat lol","path":"C:\\Users\\david\\Downloads\\aaa","isAvailable":true}]}
+{
+    "serverAddress": "127.0.0.1",
+    "serverPort": 45000,
+    "clientAddress": "127.0.0.1",
+    "clientPort": 40000,
+    "entries": [
+        {
+            "type": "musicFile",
+            "ClientAdress": "127.0.0.1",
+            "ClientPort": 40000,
+            "name": "cave-v2.mp3",
+            "path": "C:\\Users\\david\\Downloads\\cave-v2.mp3",
+            "isAvailable": true
+        },
+        {
+            "MusicFiles": [
+                "dead.wav",
+                "dry-bones-death (1).mp3"
+            ],
+            "type": "playList",
+            "ClientAdress": "127.0.0.1",
+            "ClientPort": 40000,
+            "name": "lol cat lol",
+            "path": "C:\\Users\\david\\Downloads\\aaa",
+            "isAvailable": true
+        }
+    ]
+}

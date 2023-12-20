@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 import Classes.Entry;
+import utils.Colors;
 import utils.StorageServer;
 import utils.Utils;
 
@@ -12,16 +13,22 @@ public class SendListEntryCommand implements CommandServer{
 
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
-        System.out.println("["+storage.getSrvSocket().getInetAddress().getHostAddress()+":"+storage.getSrvSocket().getPort()+"] Sending list of music to client:" );
+        if(argument != null){
+            //TODO : send a specific entry to the client
+        }
+
+        storage.printLog("Sending list of music to client:");
         
         //for each entry send the data to the client
-        out.println(Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-24s", "peers IPs and port")+Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-20s", "file name"));
-        out.println(Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-24s", "------------------")+Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-20s", "---------"));
+        out.println(Utils.colorize("| ",Colors.BLUE)+Utils.colorize(String.format("%-24s", "peers IPs and port"),Colors.WHITE)+Utils.colorize(" | ",Colors.BLUE)+Utils.colorize(String.format("%-20s", "file name"),Colors.WHITE));
+        out.println(Utils.colorize("| ",Colors.BLUE)+Utils.colorize(String.format("%-24s", "------------------"),Colors.WHITE)+Utils.colorize(" | ",Colors.BLUE)+Utils.colorize(String.format("%-20s", "---------"),Colors.WHITE));
         for (Entry entry : storage.getEntries()) {
-            out.println(Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-24s", entry.getClientAdress()+":"+entry.getClientPort())+Utils.ANSI_BLUE+"| "+Utils.ANSI_RESET+Utils.ANSI_WHITE+String.format("%-20s", entry.getName()));
+            if(entry.isAvailable()){
+                out.println(Utils.colorize("| ",Colors.BLUE)+Utils.colorize(String.format("%-24s", entry.getClientAdress()+":"+entry.getClientPort()),Colors.WHITE)+Utils.colorize(" | ",Colors.BLUE)+Utils.colorize(String.format("%-20s", entry.getName()),Colors.WHITE));
+            }
         }
         //send the end of the list
-        System.out.println("List of music sent");
+        storage.printLog("List of music sent");
         out.println("end");
     }
 

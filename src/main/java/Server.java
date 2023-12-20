@@ -44,7 +44,7 @@ public class Server {
             mySkServer.setSoTimeout(180000);
 
             // print some server information
-            Utils.title("Server Started", Utils.ANSI_GREEN_H);
+            Utils.title("Server Started",Colors.GREEN_H);
 
             System.out.println("Default Timeout   : " + mySkServer.getSoTimeout());
             System.out.println("Used IpAddress    : " + mySkServer.getInetAddress().getHostAddress());
@@ -58,7 +58,7 @@ public class Server {
     public static void loop() {
         commands.get("help").execute(null, null, null);
         while (true) {
-            Utils.title("Waiting for a client connection...", Utils.ANSI_BLUE_H);
+            Utils.title("Waiting for a client connection...", Colors.BLUE_H);
 
             try {
                 Socket srvSocket = storage.getMySkServer().accept();
@@ -87,17 +87,17 @@ public class Server {
                             if (cmd != null) {
                                 cmd.execute(argument, in, out);
                             } else {
-                                System.out.println(
-                                        "Command not found " + Utils.ANSI_BLUE + command + Utils.ANSI_RESET);
+                                storage.printLog(
+                                        "Command not found " + Utils.colorize(command, Colors.YELLOW));
                                 // respond to the client
-                                out.println("Command not found " + Utils.ANSI_BLUE + command + Utils.ANSI_RESET);
+                                out.println("Command not found " + Utils.colorize(command, Colors.YELLOW));
                                 out.println("end");
                             }
                             
                         }
 
                     } catch (Exception e) {
-                        Utils.title("Client :"+storage.getCurrentSocket().getInetAddress().getHostAddress()+":"+ storage.getCurrentSocket().getPort() + " disconnected", Utils.ANSI_RED_H);
+                        Utils.title("Client :"+storage.getCurrentSocket().getInetAddress().getHostAddress()+":"+ storage.getCurrentSocket().getPort() + " disconnected",Colors.RED_H);
                         storage.updateClientEntry(false);
                     }
 

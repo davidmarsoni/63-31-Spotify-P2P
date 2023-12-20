@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.*;
 
+import CommandsClient.CommandClient;
+import utils.Colors;
 import utils.StorageServer;
 import utils.Utils;
 
@@ -35,38 +37,48 @@ public class HelpCommand implements CommandServer {
 
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
-        // If the argument is null, display the list of all the commands available otherwise display the help of the command
         if(argument == null){
-            // get ansi colors for readability
-            String ANSI_RESET = Utils.ANSI_RESET;
-            String ANSI_BLUE = Utils.ANSI_BLUE;
+         // get ansi colors for readability
+            String BLUE =Colors.BLUE;
+            String WHITE = Colors.WHITE;
+
             // print the title
             Utils.title("Help");
 
             // print the table
-            System.out.println(ANSI_BLUE + "| " + Utils.ANSI_WHITE + String.format("%-12s", "Command") + ANSI_BLUE +" | "+ ANSI_RESET  + String.format("%-68s", "Description"));
-            System.out.println(ANSI_BLUE + "| " + Utils.ANSI_WHITE + String.format("%-12s", "-------") + ANSI_BLUE +" | "+ ANSI_RESET  + String.format("%-68s", "-----------"));
+            System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", "Command"), WHITE)
+                    + Utils.colorize(" | ", BLUE)
+                    + String.format("%-68s", "Description"));
+            System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", "-------"), WHITE)
+                    + Utils.colorize(" | ", BLUE)
+                    + String.format("%-68s", "-----------"));
             Map<String, CommandServer> sortedCommands = new TreeMap<>(commands);
+
             for (Map.Entry<String, CommandServer> entry : sortedCommands.entrySet()) {
                 String key = entry.getKey();
                 CommandServer value = entry.getValue();
                 String[] helpLines = value.help().split("\n");
-                for (String line : helpLines) {
-                    System.out.println(ANSI_BLUE + "| " + Utils.ANSI_WHITE + String.format("%-12s", key) + ANSI_BLUE +" | "+ ANSI_RESET  + String.format("%-68s", line));
-                }          
+                System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", key), WHITE)
+                        + Utils.colorize(" | ", BLUE) + String.format("%-68s", helpLines[0]));
+                for (int i = 1; i < helpLines.length; i++) {
+                    System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", ""), WHITE)
+                            + Utils.colorize(" | ", BLUE) + String.format("%-68s", helpLines[i]));
+                    key = "";
+                }
             }
             System.out.println("");
-            
-        }else{
+
+        } else {
             // get the command from the argument
             CommandServer cmd = commands.get(argument);
-            // if the command exist, display the help of the command otherwise display an error message
+            // if the command exist, display the help of the command otherwise display an
+            // error message
             if (cmd != null) {
-                Utils.title("Help "+argument);
+                Utils.title("Help " + argument);
                 System.out.println(cmd.help());
                 System.out.println("");
             } else {
-                System.out.println("Command not found "+Utils.ANSI_YELLOW+ argument+Utils.ANSI_RESET);
+                System.out.println("Command not found " + Utils.colorize(argument,Colors.YELLOW));
             }
         }
     }

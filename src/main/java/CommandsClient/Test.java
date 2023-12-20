@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-
+import utils.Colors;
 import utils.StorageClient;
 import utils.Utils;
 
@@ -16,7 +16,7 @@ public class Test implements CommandClient {
             return;
         }
         //send a test message to the server
-        System.out.println("Disconnect form the server");
+        System.out.println("Test command");
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(storage.getClientSocket().getInputStream()));
             PrintWriter out = new PrintWriter(storage.getClientSocket().getOutputStream(), true);
@@ -36,8 +36,7 @@ public class Test implements CommandClient {
 
     @Override
     public String help() {
-        // TODO Auto-generated method stub
-        return "Test command need to be "+Utils.ANSI_RED_H+"removed"+Utils.ANSI_RESET+" from the final version";
+        return "Test command need to be "+Colors.RED_H+"removed"+Colors.RESET+" from the final version";
     }
     
 }

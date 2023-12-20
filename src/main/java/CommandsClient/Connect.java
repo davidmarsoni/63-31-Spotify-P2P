@@ -54,9 +54,9 @@ public class Connect implements CommandClient {
     @Override
     public String help() {
         return "Connect to the current server in parametter " +
-                Utils.colorize(storage.getServerAddress(), Utils.ANSI_DARK_PURPLE) +
+                Utils.colorize(storage.getServerAddress(),Colors.DARK_PURPLE) +
                 ":" +
-                Utils.colorize(String.valueOf(storage.getServerPort()), Utils.ANSI_DARK_PURPLE) +
-                " (you can change it with the command " + Utils.colorize("init", Utils.ANSI_YELLOW) + ")";
+                Utils.colorize(String.valueOf(storage.getServerPort()), Colors.DARK_PURPLE) +
+                " (you can change it with the command " + Utils.colorize("init", Colors.YELLOW) + ")";
     }
 }

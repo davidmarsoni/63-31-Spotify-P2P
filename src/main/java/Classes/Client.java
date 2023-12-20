@@ -47,4 +47,9 @@ public class Client {
         this.isAvailable = isAvalaible;
     }
 
+    @Override
+    public String toString() {
+        return "Client [ClientAdress=" + ClientAdress + ", ClientPort=" + ClientPort + ", isAvailable=" + isAvailable
+                + "]";
+    }
 }

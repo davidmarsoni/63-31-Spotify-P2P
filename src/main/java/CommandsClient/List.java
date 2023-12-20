@@ -31,7 +31,7 @@ public class List implements CommandClient{
 
             //send the command to the server
             out.println("list");
-            Utils.title("List of music from " + storage.getServerAddress() + ":" + storage.getServerPort(), Utils.ANSI_BLUE_H);
+            Utils.title("List of music from " + storage.getServerAddress() + ":" + storage.getServerPort(), Colors.BLUE_H);
             //listen the response from the server
             String response = "";
             

@@ -1,6 +1,7 @@
 package Classes;
 import java.util.ArrayList;
 
+import utils.Colors;
 import utils.Utils;
 
 public class PlayList extends Entry {
@@ -32,16 +33,19 @@ public class PlayList extends Entry {
 
     public String toString(Boolean complete) {
         String result = "";
+        String BLUE = Colors.BLUE;
+        String WHITE = Colors.WHITE;
+        String GREEN = Colors.GREEN;
         if (complete) {
-            result= Utils.colorize("| ", Utils.ANSI_BLUE) + Utils.colorize("PlayList", Utils.ANSI_WHITE)+ " : "+ Utils.colorize(getName(), Utils.ANSI_GREEN) +"\n";
-            result += Utils.colorize("| ", Utils.ANSI_BLUE) + Utils.colorize("peer", Utils.ANSI_WHITE)+ " : "+ Utils.colorize(getClientAdress(),Utils.ANSI_DARK_PURPLE)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Utils.ANSI_DARK_PURPLE) +"\n";
-            result += Utils.colorize("| ", Utils.ANSI_BLUE) + Utils.colorize("Musics names", Utils.ANSI_WHITE)+"\n";
-            result += Utils.colorize("| ", Utils.ANSI_BLUE) + Utils.colorize("------------", Utils.ANSI_WHITE)+"\n";
+            result= Utils.colorize("| ", BLUE) + Utils.colorize("PlayList",WHITE)+ " : "+ Utils.colorize(getName(),GREEN) +"\n";
+            result += Utils.colorize("| ",BLUE) + Utils.colorize("peer",WHITE)+ " : "+ Utils.colorize(getClientAdress(),Colors.DARK_PURPLE)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.DARK_PURPLE) +"\n";
+            result += Utils.colorize("| ", BLUE) + Utils.colorize("Musics names", WHITE)+"\n";
+            result += Utils.colorize("| ", BLUE) + Utils.colorize("------------", WHITE)+"\n";
             for (String musicFile : MusicFiles) {
-                result += Utils.colorize("| ", Utils.ANSI_BLUE) + musicFile +"\n";
+                result += Utils.colorize("| ", BLUE) + musicFile +"\n";
             }
         }else{
-            result = Utils.colorize(getName(), Utils.ANSI_GREEN);
+            result = Utils.colorize(getName(), GREEN);
         }
         return result;
     }

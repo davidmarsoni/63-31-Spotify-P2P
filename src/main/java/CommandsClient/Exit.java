@@ -21,7 +21,6 @@ public class Exit implements CommandClient {
         //run the disconnect command to inform the server that the client is leaving the network
         Disconnect disconnect = new Disconnect();
         disconnect.execute(argument);
-        //TODO : inform the server that the client is leaving the network and also rework the client and server save methods
         System.exit(0);
     }
     @Override

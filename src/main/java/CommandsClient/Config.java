@@ -13,13 +13,13 @@ public class Config implements CommandClient {
     public void execute(String argument) {
         Utils.titleDesc("Current config", "Display the configuration of the client");
         System.out.println("Me     : " +
-                Utils.colorize(storage.getClientAddress(), Utils.ANSI_DARK_PURPLE) +
+                Utils.colorize(storage.getClientAddress(), Colors.DARK_PURPLE) +
                 ":" +
-                Utils.colorize(String.valueOf(storage.getClientPort()), Utils.ANSI_DARK_PURPLE));
+                Utils.colorize(String.valueOf(storage.getClientPort()), Colors.DARK_PURPLE));
         System.out.println("Server : " +
-                Utils.colorize(storage.getServerAddress(), Utils.ANSI_DARK_PURPLE) +
+                Utils.colorize(storage.getServerAddress(), Colors.DARK_PURPLE) +
                 ":" +
-                Utils.colorize(String.valueOf(storage.getServerPort()), Utils.ANSI_DARK_PURPLE));
+                Utils.colorize(String.valueOf(storage.getServerPort()), Colors.DARK_PURPLE));
 
         // list all the entries shared by the client
         if (storage.getSharedEntries().isEmpty()) {

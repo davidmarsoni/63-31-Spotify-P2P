@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 import Classes.Client;
+import utils.Colors;
 import utils.StorageServer;
 import utils.Utils;
 
@@ -20,11 +21,10 @@ public class ClientShareInfoCommand implements CommandServer {
             
             storage.setCurrentClientAddress(ip);
             storage.setCurrentClientPort(port);
-            //TODO : add the client to the list of the clients
             Client client = new Client(ip, port);
             storage.updateClient(client);
 
-            System.out.println("Client address for listening : " +Utils.ANSI_BLUE+ ip + Utils.ANSI_RESET+":" +Utils.ANSI_BLUE+ port + Utils.ANSI_RESET);
+            System.out.println("Client address for listening : " + Utils.colorize(ip,Colors.DARK_PURPLE) + ":" + Utils.colorize(String.valueOf(port),Colors.DARK_PURPLE));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,7 +32,6 @@ public class ClientShareInfoCommand implements CommandServer {
 
     @Override
     public String help() {
-        // TODO Auto-generated method stub
         return "send the listening port and ip of the client to the server";
     }
     

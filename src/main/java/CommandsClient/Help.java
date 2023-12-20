@@ -32,8 +32,8 @@ public class Help implements CommandClient {
         // otherwise display the help of the command
         if (argument == null) {
             // get ansi colors for readability
-            String BLUE = Utils.ANSI_BLUE;
-            String WHITE = Utils.ANSI_WHITE;
+            String BLUE =Colors.BLUE;
+            String WHITE = Colors.WHITE;
 
             // print the title
             Utils.title("Help");
@@ -53,12 +53,15 @@ public class Help implements CommandClient {
                 String[] helpLines = value.help().split("\n");
                 System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", key), WHITE)
                         + Utils.colorize(" | ", BLUE) + String.format("%-68s", helpLines[0]));
-                for (int i = 1; i < helpLines.length; i++) {
+                /*for (int i = 1; i < helpLines.length; i++) {
                     System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", ""), WHITE)
                             + Utils.colorize(" | ", BLUE) + String.format("%-68s", helpLines[i]));
                     key = "";
-                }
+                }*/
+
             }
+            System.out.println("");
+            System.out.println("See " + Utils.colorize("help ", Colors.YELLOW)+Utils.colorize("<your command>", Colors.GREEN) + " for more details");
             System.out.println("");
 
         } else {
@@ -71,7 +74,7 @@ public class Help implements CommandClient {
                 System.out.println(cmd.help());
                 System.out.println("");
             } else {
-                System.out.println("Command not found " + Utils.colorize(argument, Utils.ANSI_YELLOW));
+                System.out.println("Command not found " + Utils.colorize(argument,Colors.YELLOW));
             }
         }
 

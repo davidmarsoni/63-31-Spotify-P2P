@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import Classes.Entry;
 import Classes.MusicFile;
 import Classes.PlayList;
+import utils.Colors;
 import utils.Utils;
 import java.util.ArrayList;
 
@@ -36,10 +37,10 @@ public class HandleShareUnShare implements CommandServer {
                             && entry.getClientAdress().equals(file.getClientAdress())
                             && entry.getClientPort() == file.getClientPort()) {
                         if (type.equals("share")) {
-                            out.println("The file " + Utils.colorize(file.getName(), Utils.ANSI_GREEN)
+                            out.println("The file " + Utils.colorize(file.getName(), Colors.GREEN)
                                     + " already exist in the list of music on the server");
                         } else {
-                            out.println("Music file " + Utils.colorize(file.getName(), Utils.ANSI_GREEN)
+                            out.println("Music file " + Utils.colorize(file.getName(), Colors.GREEN)
                                     + " removed from the list of music");
                             storage.removeEntry(entry);
                         }
@@ -50,11 +51,11 @@ public class HandleShareUnShare implements CommandServer {
                 if (type.equals("share")) {
                     // add the file to the list of music
                     storage.addEntry(file);
-                    out.println("Music file " + Utils.colorize(file.getName(), Utils.ANSI_GREEN)
+                    out.println("Music file " + Utils.colorize(file.getName(), Colors.GREEN)
                             + " added to the list of music");
 
                 } else {
-                    out.println("The file " + Utils.colorize(file.getName(), Utils.ANSI_GREEN)
+                    out.println("The file " + Utils.colorize(file.getName(), Colors.GREEN)
                             + " doesn't exist in the list of music on the server");
                 }
                 out.println("end");
@@ -82,10 +83,10 @@ public class HandleShareUnShare implements CommandServer {
                             && entry.getClientAdress().equals(storage.getCurrentClientAddress())
                             && entry.getClientPort() == storage.getCurrentClientPort()) {
                         if (type.equals("share")) {
-                            out.println("The playlist " + Utils.colorize(playlistName, Utils.ANSI_GREEN)
+                            out.println("The playlist " + Utils.colorize(playlistName, Colors.GREEN)
                                     + " already exist in the list of music on the server");
                         } else {
-                            out.println("Playlist " + Utils.colorize(playlistName, Utils.ANSI_GREEN)
+                            out.println("Playlist " + Utils.colorize(playlistName, Colors.GREEN)
                                     + " removed from the list of music");
                             storage.removeEntry(entry);
                         }
@@ -98,10 +99,10 @@ public class HandleShareUnShare implements CommandServer {
                 if (type.equals("share")) {
                     // add the playlist to the list of music
                     storage.addEntry(playlist);
-                    out.println("Playlist " + Utils.colorize(playlistName, Utils.ANSI_GREEN)
+                    out.println("Playlist " + Utils.colorize(playlistName, Colors.GREEN)
                             + " added to the list of music");
                 } else {
-                    out.println("The playlist " + Utils.colorize(playlistName, Utils.ANSI_GREEN)
+                    out.println("The playlist " + Utils.colorize(playlistName, Colors.GREEN)
                             + " doesn't exist in the list of music on the server");
                 }
                 out.println("end");

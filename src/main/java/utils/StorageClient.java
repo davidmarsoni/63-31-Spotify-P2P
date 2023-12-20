@@ -119,6 +119,8 @@ public class StorageClient {
         commands.put("config", new Config());
         commands.put("test", new Test());
         commands.put("disconnect", new Disconnect());
+        commands.put("download", new Download());
+        commands.put("ping", new Ping());
 
 
     }
@@ -137,8 +139,8 @@ public class StorageClient {
 
     public Socket getClientSocket(Boolean print) {
         if (clientSocket == null && print) {
-            System.out.println("You are not connected to a server, please use the command " + Utils.ANSI_YELLOW + "connect"
-                    + Utils.ANSI_RESET + " to connect to a server");
+            System.out.println("You are not connected to a server, please use the command " + Colors.YELLOW + "connect"
+                    + Colors.RESET + " to connect to a server");
             return null;
         }
         return clientSocket;

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 import Classes.Client;
+import utils.Colors;
 import utils.StorageServer;
 import utils.Utils;
 
@@ -19,7 +20,8 @@ public class EndCommand implements CommandServer {
             out.close();
             client.setAvailable(false);
             storage.updateClient(client);
-            Utils.title("Connection closed for client : " + client.getClientAdress().getHostAddress() + ":" + client.getClientPort(), Utils.ANSI_RED_H);
+            //TODOD : remove ServerThreadData from the list 
+            Utils.title("Connection closed for client : " + client.getClientAdress().getHostAddress() + ":" + client.getClientPort(), Colors.RED_H);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,7 +29,6 @@ public class EndCommand implements CommandServer {
 
     @Override
     public String help() {
-        // TODO Auto-generated method stub
         return "Close the connection with the client";
 
     }

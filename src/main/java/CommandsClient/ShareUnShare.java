@@ -54,7 +54,7 @@ public class ShareUnShare implements CommandClient {
     private void handleFile(String[] args) {
         File file = new File(args[0].trim());
         if (!file.exists()) {
-            System.out.println("The file " + Utils.ANSI_BLUE + args[0] + Utils.ANSI_RESET + " doesn't exist");
+            System.out.println("The file " + Utils.colorize(args[0], Colors.BLUE) +" doesn't exist");
             return;
         }
 
@@ -69,7 +69,7 @@ public class ShareUnShare implements CommandClient {
         File folder = new File(args[0].trim());
         File[] listOfFiles = folder.listFiles();
         if (!folder.exists() || listOfFiles.length == 0) {
-            System.out.println("The folder " + Utils.ANSI_BLUE + args[0] + Utils.ANSI_RESET + " doesn't exist or is empty");
+            System.out.println("The folder " +Utils.colorize(args[0], Colors.BLUE)+ " doesn't exist or is empty");
             return;
         }
         for (File file : listOfFiles) {

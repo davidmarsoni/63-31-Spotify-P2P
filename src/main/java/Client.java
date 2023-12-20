@@ -1,5 +1,3 @@
-//TODO https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
-
 import java.net.*;
 import java.util.*;
 
@@ -23,9 +21,6 @@ public class Client {
      * Loop to get the user input
      */
     public static void loop() {
-        // create 2 threads one for handling the commands and the other for handling
-        // listening from the server
-
         // create the thread for handling the commands
         Thread commandThread = new Thread(new Runnable() {
             @Override
@@ -44,7 +39,7 @@ public class Client {
                         if (cmd != null) {
                             cmd.execute(argument);
                         } else {
-                            System.out.println("Command not found " +Utils.colorize(command,Utils.ANSI_YELLOW));
+                            System.out.println("Command not found" +Utils.colorize(command,Colors.YELLOW));
                         }
                     }
                 }

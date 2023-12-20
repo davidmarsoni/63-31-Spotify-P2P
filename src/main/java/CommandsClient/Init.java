@@ -27,7 +27,6 @@ public class Init implements CommandClient {
 
         // loop until the user enter a valid ip address
         serverName = Utils.ask("Server address", serverName, "^([0-9]{1,3}\\.){3}[0-9]{1,3}$", serverName, true);
-        System.out.println(serverName);
         // I know that there is better way to do it with if else but i would like to use
         // the Utils.ask method and note devlop a new one just for this
         String tmpServerPort = Utils.ask("Server port", String.valueOf(serverPort),
@@ -39,10 +38,21 @@ public class Init implements CommandClient {
         storage.setServerAddress(serverName);
         storage.setServerPort(serverPort);
 
+
+        // ask for the listening port of the client
+        int clientPort = storage.getClientPort();
+        String tmpClientPort = Utils.ask("Client Listening port", String.valueOf(clientPort),
+                "^([0-9]{1,4}|[0-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6])$",
+                String.valueOf(clientPort), true);
+        clientPort = Integer.parseInt(tmpClientPort);
+        storage.setClientPort(clientPort);
+       
         System.out.println("");
         System.out.println("New server address and port saved");
-        System.out.println("Server : " + Utils.colorize(storage.getServerAddress(), Utils.ANSI_DARK_PURPLE) + ":"
-                + Utils.colorize(String.valueOf(storage.getServerPort()), Utils.ANSI_DARK_PURPLE));
+        System.out.println("Server : " + Utils.colorize(storage.getServerAddress(),Colors.DARK_PURPLE) + ":"
+                + Utils.colorize(String.valueOf(storage.getServerPort()), Colors.DARK_PURPLE));
+        System.out.println("Client : " + Utils.colorize(storage.getClientAddress(),Colors.DARK_PURPLE) + ":"
+                + Utils.colorize(String.valueOf(storage.getClientPort()), Colors.DARK_PURPLE));
         System.out.println("");
     }
 

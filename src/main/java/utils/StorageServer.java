@@ -14,6 +14,7 @@ import CommandsServer.EndCommand;
 import CommandsServer.HandleShareCommand;
 import CommandsServer.HandleUnShareCommand;
 import CommandsServer.HelpCommand;
+import CommandsServer.PingCommand;
 import CommandsServer.SendListEntryCommand;
 
 public class StorageServer {
@@ -52,7 +53,9 @@ public class StorageServer {
         commands.put("unshare", new HandleUnShareCommand());
         commands.put("sendInfo", new ClientShareInfoCommand());
         commands.put("end", new EndCommand());
+        commands.put("ping", new PingCommand());
 
+        //TODO : Remove this
         entries.add(new MusicFile("129.168.102.344", 64532, "Cave-v2.mp3", "Todo"));
     }
 
@@ -119,7 +122,7 @@ public class StorageServer {
     public void updateClientEntry(Boolean isAvailable) {
         // each entry that have the current client address and port will be updated to be alvailable
         for (Entry entry : entries) {
-            if (entry.getClientAdress().equals(getCurrentServerThreadsData().getClientAddress().getHostAddress()) && entry.getClientPort() == getCurrentServerThreadsData().getClientPort()) {
+            if (entry.getClientAdress().equals(getCurrentClientAddress()) && entry.getClientPort() == getCurrentClientPort()) {
                 entry.setAvailable(isAvailable);
             }
         }
@@ -198,4 +201,9 @@ public class StorageServer {
         return getCurrentServerThreadsData().getSocket();
     }
 
+
+    public void printLog(String message) {
+        //TODO : Add logs handling
+        System.out.println("["+getCurrentSocket().getInetAddress().getHostAddress()+":"+getCurrentSocket().getPort()+"] "+message);
+    }
 }

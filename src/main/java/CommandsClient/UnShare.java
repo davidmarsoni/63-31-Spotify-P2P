@@ -1,5 +1,6 @@
 package CommandsClient;
 
+import utils.Colors;
 import utils.Utils;
 
 public class UnShare implements CommandClient {
@@ -14,9 +15,9 @@ public class UnShare implements CommandClient {
     @Override
     public String help() {
         String message = "Unshare a file with other users \n"+
-        "note : the file must be a ablsolute path"+
-        "Usage: "+Utils.colorize("unshare ", Utils.ANSI_YELLOW)+Utils.colorize("<file>",Utils.ANSI_GREEN)+" to unshare a music file\n"+
-        "       "+Utils.colorize("unshare ", Utils.ANSI_YELLOW)+Utils.colorize("<folder> <name> ",Utils.ANSI_GREEN)+"to unshare a playlist\n";
+        "note : the file must be a ablsolute path \n"+
+        "Usage: "+Utils.colorize("unshare ", Colors.YELLOW)+Utils.colorize("<file>",Colors.GREEN)+" to unshare a music file\n"+
+        "       "+Utils.colorize("unshare ", Colors.YELLOW)+Utils.colorize("<folder> <name> ",Colors.GREEN)+"to unshare a playlist\n";
         return message;
     }
     

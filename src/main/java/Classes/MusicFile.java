@@ -1,4 +1,5 @@
 package Classes;
+import utils.Colors;
 import utils.Utils;
 
 public class MusicFile extends Entry {
@@ -17,12 +18,17 @@ public class MusicFile extends Entry {
 
     public String toString(Boolean complete) {
         String result = "";
+        String BLUE = Colors.BLUE;
+        String WHITE = Colors.WHITE;
+        String GREEN = Colors.GREEN;
+
+
         if (complete) {
-            result= Utils.colorize("| ", Utils.ANSI_BLUE) + Utils.colorize("MusicFile", Utils.ANSI_WHITE)+ " : "+ Utils.colorize(getName(), Utils.ANSI_GREEN) +"\n";
-            result += Utils.colorize("| ", Utils.ANSI_BLUE) + Utils.colorize("peer", Utils.ANSI_WHITE)+ " : "+ Utils.colorize(getClientAdress(),Utils.ANSI_DARK_PURPLE)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Utils.ANSI_DARK_PURPLE) +"\n";
-            result += Utils.colorize("| ", Utils.ANSI_BLUE) + Utils.colorize("path", Utils.ANSI_WHITE)+ " : "+ Utils.colorize(getPath(),Utils.ANSI_DARK_PURPLE) +"\n";
+            result= Utils.colorize("| ",BLUE) + Utils.colorize("MusicFile", WHITE)+ " : "+ Utils.colorize(getName(), GREEN) +"\n";
+            result += Utils.colorize("| ", BLUE) + Utils.colorize("peer", WHITE)+ " : "+ Utils.colorize(getClientAdress(),GREEN)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.DARK_PURPLE) +"\n";
+            result += Utils.colorize("| ", BLUE) + Utils.colorize("path", WHITE)+ " : "+ Utils.colorize(getPath(),Colors.DARK_PURPLE) +"\n";
         }else{
-            result = Utils.colorize(getName(), Utils.ANSI_GREEN);
+            result = Utils.colorize(getName(), GREEN);
         }
         return result;
     }
