@@ -1,7 +1,7 @@
 package CommandsClient;
 
 import utils.*;
-public class Share implements CommandClient{
+public class Share implements Command{
     @Override
     public void execute(String argument) {
         ShareUnShare share = new ShareUnShare("share");

@@ -25,8 +25,8 @@ public class MusicFile extends Entry {
 
         if (complete) {
             result= Utils.colorize("| ",BLUE) + Utils.colorize("MusicFile", WHITE)+ " : "+ Utils.colorize(getName(), GREEN) +"\n";
-            result += Utils.colorize("| ", BLUE) + Utils.colorize("peer", WHITE)+ " : "+ Utils.colorize(getClientAdress(),GREEN)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.DARK_PURPLE) +"\n";
-            result += Utils.colorize("| ", BLUE) + Utils.colorize("path", WHITE)+ " : "+ Utils.colorize(getPath(),Colors.DARK_PURPLE) +"\n";
+            result += Utils.colorize("| ", BLUE) + Utils.colorize("host", WHITE)+ " : "+ Utils.colorize(getClientAdress(),GREEN)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.DARK_PURPLE) +"\n";
+            result += Utils.colorize("| ", BLUE) + Utils.colorize("host", WHITE)+ " : "+ Utils.colorize(getPath(),Colors.DARK_PURPLE) +"\n";
         }else{
             result = Utils.colorize(getName(), GREEN);
         }

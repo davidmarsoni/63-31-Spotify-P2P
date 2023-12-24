@@ -9,9 +9,9 @@ import utils.*;
  * This command display the list of all the commands available or a specific
  * command
  */
-public class Help implements CommandClient {
+public class Help implements Command {
     private StorageClient storage = StorageClient.getInstance(); // Storage of the client
-    Map<String, CommandClient> commands; // List of all the commands available
+    Map<String, Command> commands; // List of all the commands available
 
     /**
      * Constructor of the command
@@ -45,11 +45,11 @@ public class Help implements CommandClient {
             System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", "-------"), WHITE)
                     + Utils.colorize(" | ", BLUE)
                     + String.format("%-68s", "-----------"));
-            Map<String, CommandClient> sortedCommands = new TreeMap<>(commands);
+            Map<String, Command> sortedCommands = new TreeMap<>(commands);
 
-            for (Map.Entry<String, CommandClient> entry : sortedCommands.entrySet()) {
+            for (Map.Entry<String, Command> entry : sortedCommands.entrySet()) {
                 String key = entry.getKey();
-                CommandClient value = entry.getValue();
+                Command value = entry.getValue();
                 String[] helpLines = value.help().split("\n");
                 System.out.println(Utils.colorize("| ", BLUE) + Utils.colorize(String.format("%-12s", key), WHITE)
                         + Utils.colorize(" | ", BLUE) + String.format("%-68s", helpLines[0]));
@@ -66,7 +66,7 @@ public class Help implements CommandClient {
 
         } else {
             // get the command from the argument
-            CommandClient cmd = commands.get(argument);
+            Command cmd = commands.get(argument);
             // if the command exist, display the help of the command otherwise display an
             // error message
             if (cmd != null) {

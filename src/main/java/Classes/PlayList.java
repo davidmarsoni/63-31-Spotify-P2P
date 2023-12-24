@@ -38,7 +38,7 @@ public class PlayList extends Entry {
         String GREEN = Colors.GREEN;
         if (complete) {
             result= Utils.colorize("| ", BLUE) + Utils.colorize("PlayList",WHITE)+ " : "+ Utils.colorize(getName(),GREEN) +"\n";
-            result += Utils.colorize("| ",BLUE) + Utils.colorize("peer",WHITE)+ " : "+ Utils.colorize(getClientAdress(),Colors.DARK_PURPLE)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.DARK_PURPLE) +"\n";
+            result += Utils.colorize("| ",BLUE) + Utils.colorize("host",WHITE)+ " : "+ Utils.colorize(getClientAdress(),Colors.DARK_PURPLE)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.DARK_PURPLE) +"\n";
             result += Utils.colorize("| ", BLUE) + Utils.colorize("Musics names", WHITE)+"\n";
             result += Utils.colorize("| ", BLUE) + Utils.colorize("------------", WHITE)+"\n";
             for (String musicFile : MusicFiles) {

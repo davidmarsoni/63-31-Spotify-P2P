@@ -6,7 +6,7 @@ import java.util.*;
 import Classes.*;
 import utils.*;
 
-public class ShareUnShare implements CommandClient {
+public class ShareUnShare implements Command {
     private StorageClient storage = StorageClient.getInstance();
     private String type = "";
     private String data = "";
@@ -16,6 +16,7 @@ public class ShareUnShare implements CommandClient {
         this.type = Type;
     }
 
+    //TODO : filter only music file .wav .mp3 
     @Override
     public void execute(String argument) {
         if (storage.getClientSocket() == null || argument == null) {
@@ -58,7 +59,7 @@ public class ShareUnShare implements CommandClient {
             return;
         }
 
-        MusicFile musicFile = new MusicFile(storage.getClientAddress(), storage.getClientPort(), file.getName(), file.getAbsolutePath());
+        MusicFile musicFile = new MusicFile(storage.getLocalAdressString(), storage.getPort(), file.getName(), file.getAbsolutePath());
         updateStorage(musicFile);
 
         data = "file#" + musicFile.getName() + "#" + musicFile.getPath();
@@ -74,12 +75,12 @@ public class ShareUnShare implements CommandClient {
         }
         for (File file : listOfFiles) {
             if (file.isFile()) {
-                MusicFile musicFile = new MusicFile(storage.getClientAddress(), storage.getClientPort(), file.getName(), file.getAbsolutePath());
+                MusicFile musicFile = new MusicFile(storage.getLocalAdressString(), storage.getPort(), file.getName(), file.getAbsolutePath());
                 musicFiles.add(musicFile.getName());
             }
         }
 
-        PlayList playList = new PlayList(storage.getClientAddress(), storage.getClientPort(), args[0].trim(), args[1], musicFiles);
+        PlayList playList = new PlayList(storage.getLocalAdressString(), storage.getPort(), args[0].trim(), args[1], musicFiles);
         updateStorage(playList);
 
         data = "playlist#" + playList.getName() + "#" + playList.getPath();

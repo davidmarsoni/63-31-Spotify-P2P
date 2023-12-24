@@ -6,7 +6,7 @@ import utils.Colors;
 import utils.StorageClient;
 import utils.Utils;
 
-public class Disconnect implements CommandClient {
+public class Disconnect implements Command {
     private StorageClient storage = StorageClient.getInstance();
 
     @Override

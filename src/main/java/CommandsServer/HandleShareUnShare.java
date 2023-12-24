@@ -32,7 +32,7 @@ public class HandleShareUnShare implements CommandServer {
                         splitData[2]);
                 // test if the file already exist in the list of music (same name and same path)
                 // test for the music file name and path
-                for (Entry entry : storage.getEntries()) {
+                for (Entry entry : storage.getSharedEntries()) {
                     if (entry.getName().equals(file.getName()) && entry.getPath().equals(file.getPath())
                             && entry.getClientAdress().equals(file.getClientAdress())
                             && entry.getClientPort() == file.getClientPort()) {
@@ -42,7 +42,7 @@ public class HandleShareUnShare implements CommandServer {
                         } else {
                             out.println("Music file " + Utils.colorize(file.getName(), Colors.GREEN)
                                     + " removed from the list of music");
-                            storage.removeEntry(entry);
+                            storage.removeSharedEntry(entry);
                         }
                         out.println("end");
                         return;
@@ -50,7 +50,7 @@ public class HandleShareUnShare implements CommandServer {
                 }
                 if (type.equals("share")) {
                     // add the file to the list of music
-                    storage.addEntry(file);
+                    storage.addSharedEntry(file);
                     out.println("Music file " + Utils.colorize(file.getName(), Colors.GREEN)
                             + " added to the list of music");
 
@@ -78,7 +78,7 @@ public class HandleShareUnShare implements CommandServer {
                         playlistName, musicFiles);
 
                 //test if the playlist already exist in the list of music (same name and same path)
-                for (Entry entry : storage.getEntries()) {
+                for (Entry entry : storage.getSharedEntries()) {
                     if (entry.getName().equals(playlistName) && entry.getPath().equals(playlistPath)
                             && entry.getClientAdress().equals(storage.getCurrentClientAddress())
                             && entry.getClientPort() == storage.getCurrentClientPort()) {
@@ -88,7 +88,7 @@ public class HandleShareUnShare implements CommandServer {
                         } else {
                             out.println("Playlist " + Utils.colorize(playlistName, Colors.GREEN)
                                     + " removed from the list of music");
-                            storage.removeEntry(entry);
+                            storage.removeSharedEntry(entry);
                         }
                         out.println("end");
                         return;
@@ -98,7 +98,7 @@ public class HandleShareUnShare implements CommandServer {
                 
                 if (type.equals("share")) {
                     // add the playlist to the list of music
-                    storage.addEntry(playlist);
+                    storage.addSharedEntry(playlist);
                     out.println("Playlist " + Utils.colorize(playlistName, Colors.GREEN)
                             + " added to the list of music");
                 } else {

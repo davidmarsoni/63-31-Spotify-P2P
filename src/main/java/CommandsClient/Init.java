@@ -6,7 +6,7 @@ import utils.*;
  * Init Command
  * This command is used to configure the server address and port of the server
  */
-public class Init implements CommandClient {
+public class Init implements Command {
     // get the storage instance
     private StorageClient storage = StorageClient.getInstance();
 
@@ -40,19 +40,19 @@ public class Init implements CommandClient {
 
 
         // ask for the listening port of the client
-        int clientPort = storage.getClientPort();
+        int clientPort = storage.getPort();
         String tmpClientPort = Utils.ask("Client Listening port", String.valueOf(clientPort),
                 "^([0-9]{1,4}|[0-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6])$",
                 String.valueOf(clientPort), true);
         clientPort = Integer.parseInt(tmpClientPort);
-        storage.setClientPort(clientPort);
+        storage.setPort(clientPort);
        
         System.out.println("");
         System.out.println("New server address and port saved");
         System.out.println("Server : " + Utils.colorize(storage.getServerAddress(),Colors.DARK_PURPLE) + ":"
                 + Utils.colorize(String.valueOf(storage.getServerPort()), Colors.DARK_PURPLE));
-        System.out.println("Client : " + Utils.colorize(storage.getClientAddress(),Colors.DARK_PURPLE) + ":"
-                + Utils.colorize(String.valueOf(storage.getClientPort()), Colors.DARK_PURPLE));
+        System.out.println("Client : " + Utils.colorize(storage.getLocalAdressString(),Colors.DARK_PURPLE) + ":"
+                + Utils.colorize(String.valueOf(storage.getPort()), Colors.DARK_PURPLE));
         System.out.println("");
     }
 

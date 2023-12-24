@@ -3,7 +3,7 @@ package CommandsClient;
 import utils.Colors;
 import utils.Utils;
 
-public class UnShare implements CommandClient {
+public class UnShare implements Command {
     public UnShare() {}
 
     @Override

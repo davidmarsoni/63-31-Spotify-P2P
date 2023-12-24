@@ -3,7 +3,7 @@ package CommandsClient;
 /**
  * Interface for the commands
  */
-public interface CommandClient {
+public interface Command {
     /**
      * Execute the command
      * @param argument the argument of the command

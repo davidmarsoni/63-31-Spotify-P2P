@@ -9,7 +9,7 @@ import utils.*;
  * This command is used to connect to the server with the current configuration
  * (server address and port)
  */
-public class Connect implements CommandClient {
+public class Connect implements Command {
     // get the instance of the storage to get the data
     private StorageClient storage = StorageClient.getInstance();
 
@@ -39,7 +39,7 @@ public class Connect implements CommandClient {
             // set info to the server on with port the client is listening
             PrintWriter out = new PrintWriter(storage.getClientSocket().getOutputStream(), true);
             out.println("sendInfo");
-            out.println(storage.getClientAddress() + " " + storage.getClientPort());
+            out.println(storage.getLocalAdress().getHostAddress() + " " + storage.getPort());
 
             System.out.println("Connected to " + serverAddress.getHostAddress() + ":" + serverPort);
         } catch (UnknownHostException e) {

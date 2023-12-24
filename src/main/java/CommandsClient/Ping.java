@@ -8,7 +8,7 @@ import utils.Colors;
 import utils.StorageClient;
 import utils.Utils;
 
-public class Ping implements CommandClient {
+public class Ping implements Command {
     private StorageClient storage = StorageClient.getInstance();
 
     @Override

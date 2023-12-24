@@ -7,7 +7,7 @@ import java.io.*;
  * ListMusics command
  * This command is used to list all Entry available on the server
  */
-public class List implements CommandClient{
+public class List implements Command{
     private StorageClient storage = StorageClient.getInstance();
     @Override
     public void execute(String argument) {

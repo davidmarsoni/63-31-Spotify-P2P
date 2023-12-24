@@ -2,8 +2,6 @@ package CommandsServer;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.*;
-
-import CommandsClient.CommandClient;
 import utils.Colors;
 import utils.StorageServer;
 import utils.Utils;
@@ -21,7 +19,7 @@ public class HelpCommand implements CommandServer {
      * Constructor of the command
      */
     public HelpCommand() {
-        commands = storage.getCommands(); // Get the list of all the commands available from the storage
+        commands = storage.getServerCommands(); // Get the list of all the commands available from the storage
     }
 
 

@@ -8,7 +8,7 @@ import utils.StorageClient;
  * Exit command
  * This command exit the program and save the data of the client
  */
-public class Exit implements CommandClient {
+public class Exit implements Command {
     private StorageClient storage = StorageClient.getInstance();
 
     public Exit() {}

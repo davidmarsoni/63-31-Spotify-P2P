@@ -1,3 +1,4 @@
+
 import java.net.*;
 import java.util.*;
 
@@ -8,7 +9,7 @@ public class Client {
     static Socket clientSocket;
     static InetAddress serverAddress;
     static StorageClient storage = StorageClient.getInstance();
-    static Map<String, CommandClient> commands = storage.getCommands();
+    static Map<String, Command> commands = storage.getCommands();
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -35,11 +36,11 @@ public class Client {
                         String command = words[0];
                         String argument = words.length > 1 ? words[1] : null;
                         // System.out.println("Command: " + command + " Argument: " + argument);
-                        CommandClient cmd = commands.get(command);
+                        Command cmd = commands.get(command);
                         if (cmd != null) {
                             cmd.execute(argument);
                         } else {
-                            System.out.println("Command not found" +Utils.colorize(command,Colors.YELLOW));
+                            System.out.println("Command not found " +Utils.colorize(command,Colors.YELLOW));
                         }
                     }
                 }
@@ -51,9 +52,9 @@ public class Client {
         Thread listeningThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                storage.setSrvSocket(ServerManagement.initializedServerSocket(storage.getPort()));
                 while (true) {
-                    // TODO : handle the listening from the server so first connection and then a new tread foreach client listening with command and argument
-                    // it will be like the server command system
+                    ServerManagement.handleNewConnection(storage.getSrvSocket(), storage, false);
                 }
             }
         });

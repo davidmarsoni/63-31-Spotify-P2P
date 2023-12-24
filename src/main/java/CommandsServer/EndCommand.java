@@ -20,7 +20,7 @@ public class EndCommand implements CommandServer {
             out.close();
             client.setAvailable(false);
             storage.updateClient(client);
-            //TODOD : remove ServerThreadData from the list 
+            storage.removeCurrentThreadData();
             Utils.title("Connection closed for client : " + client.getClientAdress().getHostAddress() + ":" + client.getClientPort(), Colors.RED_H);
         } catch (Exception e) {
             e.printStackTrace();

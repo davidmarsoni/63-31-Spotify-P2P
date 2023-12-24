@@ -1,8 +1,6 @@
 package utils;
 
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.*;
 
 import Classes.Client;
@@ -11,28 +9,17 @@ import Classes.MusicFile;
 import CommandsServer.ClientShareInfoCommand;
 import CommandsServer.CommandServer;
 import CommandsServer.EndCommand;
+import CommandsServer.HandleGetInfoCommand;
 import CommandsServer.HandleShareCommand;
 import CommandsServer.HandleUnShareCommand;
 import CommandsServer.HelpCommand;
 import CommandsServer.PingCommand;
 import CommandsServer.SendListEntryCommand;
 
-public class StorageServer {
+public class StorageServer extends Storage{
     private static StorageServer instance = null;
-    private InetAddress localAddress = null;
-    private String interfaceName = "eth1";
-    private int port = 45000;
-    private ServerSocket mySkServer;
-   
-
-    private LinkedList<Entry> entries = new LinkedList<Entry>();
     private LinkedList<Client> clients = new LinkedList<Client>();
-    private Map<Integer,ServerThreadData> serverThreadDatas = new HashMap<>();
-    private Map<String,CommandServer> commands ;
-
-
-    private Socket srvSocket = null;
-
+  
     private StorageServer() {
         // private constructor to prevent instantiation
     }
@@ -41,87 +28,34 @@ public class StorageServer {
         if (instance == null) {
             instance = new StorageServer();
             instance.initCommands();
+            instance.setPort(45000);
+            try {
+                instance.setLocalAdress(InetAddress.getByName("127.0.0.1"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return instance;
     }
 
     private void initCommands(){
-        commands = new HashMap<>();
-        commands.put("help", new HelpCommand());
-        commands.put("list", new SendListEntryCommand());
-        commands.put("share", new HandleShareCommand());
-        commands.put("unshare", new HandleUnShareCommand());
-        commands.put("sendInfo", new ClientShareInfoCommand());
-        commands.put("end", new EndCommand());
-        commands.put("ping", new PingCommand());
+        setServerCommands(new HashMap<String, CommandServer>());
+        getServerCommands().put("help", new HelpCommand());
+        getServerCommands().put("list", new SendListEntryCommand());
+        getServerCommands().put("share", new HandleShareCommand());
+        getServerCommands().put("unshare", new HandleUnShareCommand());
+        getServerCommands().put("sendInfo", new ClientShareInfoCommand());
+        getServerCommands().put("end", new EndCommand());
+        getServerCommands().put("ping", new PingCommand());
+        getServerCommands().put("getInfo", new HandleGetInfoCommand());
 
         //TODO : Remove this
-        entries.add(new MusicFile("129.168.102.344", 64532, "Cave-v2.mp3", "Todo"));
-    }
-
-    public Socket getSrvSocket() {
-        return srvSocket;
-    }
-
-    public void setSrvSocket(Socket srvSocket) {
-        this.srvSocket = srvSocket;
-    }
-
-    public InetAddress getLocalAddress() {
-        return localAddress;
-    }
-
-    public void setLocalAddress(InetAddress localAddress) {
-        this.localAddress = localAddress;
-    }
-
-    public ServerSocket getMySkServer() {
-        return mySkServer;
-    }
-
-    public void setMySkServer(ServerSocket mySkServer) {
-        this.mySkServer = mySkServer;
-    }
-
-    public String getInterfaceName() {
-        return interfaceName;
-    }
-
-    public void setInterfaceName(String interfaceName) {
-        this.interfaceName = interfaceName;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public LinkedList<Entry> getEntries() {
-        return entries;
-    }
-
-    public void addEntry(Entry entry) {
-        this.entries.add(entry);
-    }
-
-    public void removeEntry(Entry entry) {
-        this.entries.remove(entry);
-    }
-
-    public Map<String, CommandServer> getCommands() {
-        return commands;
-    }
-
-    public void setCommands(Map<String, CommandServer> commands) {
-        this.commands = commands;
+        getSharedEntries().add(new MusicFile("129.168.102.344", 64532, "Cave-v2.mp3", "Todo"));
     }
 
     public void updateClientEntry(Boolean isAvailable) {
         // each entry that have the current client address and port will be updated to be alvailable
-        for (Entry entry : entries) {
+        for (Entry entry : getSharedEntries()) {
             if (entry.getClientAdress().equals(getCurrentClientAddress()) && entry.getClientPort() == getCurrentClientPort()) {
                 entry.setAvailable(isAvailable);
             }
@@ -160,50 +94,9 @@ public class StorageServer {
     public LinkedList<Client> getClients() {
         return clients;
     }
-
-    public void addServerThreadData(int id, ServerThreadData serverThreadData) {
-        serverThreadDatas.put(id, serverThreadData);
-    }
-
-    public void addServerThreadData(ServerThreadData serverThreadData) {
-        addServerThreadData(Thread.currentThread().hashCode(), serverThreadData);
-    }
-
-    public void removeServerThreadData(int id) {
-        serverThreadDatas.remove(id);
-    }
-
-    public Map<Integer, ServerThreadData> getServerThreadsDatas() {
-        return serverThreadDatas;
-    }
-
-    public ServerThreadData getCurrentServerThreadsData() {
-        return serverThreadDatas.get(Thread.currentThread().hashCode());
-    }
-
-    public String getCurrentClientAddress() {
-        return getCurrentServerThreadsData().getClientAddress().getHostAddress();
-    }
-
-    public int getCurrentClientPort() {
-        return getCurrentServerThreadsData().getClientPort();
-    }
-
-    public void setCurrentClientAddress(String clientAddress) {
-        getCurrentServerThreadsData().setClientAddress(clientAddress);
-    }
-
-    public void setCurrentClientPort(int clientPort) {
-        getCurrentServerThreadsData().setClientPort(clientPort);
-    }
-
-    public Socket getCurrentSocket() {
-        return getCurrentServerThreadsData().getSocket();
-    }
-
-
     public void printLog(String message) {
-        //TODO : Add logs handling
-        System.out.println("["+getCurrentSocket().getInetAddress().getHostAddress()+":"+getCurrentSocket().getPort()+"] "+message);
+        String log = "["+getCurrentSocket().getInetAddress().getHostAddress()+":"+getCurrentSocket().getPort()+"] "+message;
+        Logs.info(log);
+        System.out.println(log);
     }
 }

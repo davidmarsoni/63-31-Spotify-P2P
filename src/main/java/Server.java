@@ -9,50 +9,12 @@ public class Server {
 
     static Scanner sc = new Scanner(System.in);
     static StorageServer storage = StorageServer.getInstance();
-    static Map<String, CommandServer> commands = storage.getCommands();
+    static Map<String, CommandServer> commands = storage.getServerCommands();
 
     public static void main(String[] args) {
         Utils.renderStart(true);
-        init();
+        storage.setSrvSocket(ServerManagement.initializedServerSocket(storage.getPort()));
         loop();
-    }
-
-    public static void init() {
-        InetAddress localAddress = null;
-        try {
-            NetworkInterface ni = NetworkInterface.getByName(storage.getInterfaceName());
-            Enumeration<InetAddress> inetAddresses = ni.getInetAddresses();
-            while (inetAddresses.hasMoreElements()) {
-                InetAddress ia = inetAddresses.nextElement();
-
-                if (!ia.isLinkLocalAddress()) {
-                    if (!ia.isLoopbackAddress()) {
-                        System.out.println(ni.getName() + "->IP: " + ia.getHostAddress());
-                        localAddress = ia;
-                    }
-                }
-            }
-            if (localAddress == null) {
-                System.out.println("No non-local address found for interface " + storage.getInterfaceName());
-            }
-
-            // Warning: the backlog value (2nd parameter is handled by the implementation
-            ServerSocket mySkServer = new ServerSocket(45000, 10, localAddress);
-            
-            storage.setMySkServer(mySkServer);
-            // set 3min timeout
-            mySkServer.setSoTimeout(180000);
-
-            // print some server information
-            Utils.title("Server Started",Colors.GREEN_H);
-
-            System.out.println("Default Timeout   : " + mySkServer.getSoTimeout());
-            System.out.println("Used IpAddress    : " + mySkServer.getInetAddress().getHostAddress());
-            System.out.println("Listening to Port : " + mySkServer.getLocalPort());
-        } catch (Exception e) {
-            System.err.println("Error initializing server");
-            e.printStackTrace();
-        }
     }
 
     public static void loop() {
@@ -61,19 +23,19 @@ public class Server {
             Utils.title("Waiting for a client connection...", Colors.BLUE_H);
 
             try {
-                Socket srvSocket = storage.getMySkServer().accept();
+                Socket srvSocket = storage.getSrvSocket().accept();
 
                 new Thread(() -> {
-                    ServerThreadData serverThreadData = new ServerThreadData(srvSocket);
-                    storage.addServerThreadData(serverThreadData);
-                    storage.setSrvSocket(srvSocket);
+                    ThreadData threadData = new ThreadData(srvSocket);
+                    storage.addThreadData(threadData);
+                    storage.setClientSocket(srvSocket);
                     System.out.println(
-                        "Connection accepted from " + storage.getSrvSocket().getInetAddress().getHostAddress() + ":" + storage.getSrvSocket().getPort());
+                        "Connection accepted from " + storage.getClientSocket().getInetAddress().getHostAddress() + ":" + storage.getClientSocket().getPort());
                     // listen command from client
                     try {
                         BufferedReader in = new BufferedReader(
-                                new InputStreamReader(storage.getSrvSocket().getInputStream()));
-                        PrintWriter out = new PrintWriter(storage.getSrvSocket().getOutputStream(), true);
+                                new InputStreamReader(storage.getClientSocket().getInputStream()));
+                        PrintWriter out = new PrintWriter(storage.getClientSocket().getOutputStream(), true);
                         while (true) {
                             System.out.println("Waiting for a command from client");
                             // get the command
@@ -98,6 +60,7 @@ public class Server {
 
                     } catch (Exception e) {
                         Utils.title("Client :"+storage.getCurrentSocket().getInetAddress().getHostAddress()+":"+ storage.getCurrentSocket().getPort() + " disconnected",Colors.RED_H);
+                        e.printStackTrace();
                         storage.updateClientEntry(false);
                     }
 
@@ -108,18 +71,4 @@ public class Server {
             }
         }
     }
-
-    public static void chat(BufferedReader in, PrintWriter out) {
-        try {
-            String userInput;
-            while (!(userInput = in.readLine()).equalsIgnoreCase("exit")) {
-                System.out.println("Client: " + userInput);
-                out.println(userInput);
-            }
-        } catch (IOException e) {
-            System.err.println("I/O error in chat function");
-            e.printStackTrace();
-        }
-    }
-
 }
