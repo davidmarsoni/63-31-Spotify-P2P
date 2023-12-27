@@ -1,7 +1,10 @@
 package Classes;
 
 import java.net.InetAddress;
-
+/**
+ * This class is use to store information about a client
+ * this class is juste use for storage on the server side
+ */
 public class Client {
     private InetAddress ClientAdress;
     private int ClientPort;

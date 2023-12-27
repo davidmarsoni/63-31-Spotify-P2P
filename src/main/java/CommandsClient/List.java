@@ -14,10 +14,11 @@ public class List implements Command{
 
         if(argument != null) {
             // TODO : allow the user to list a specific music or playlist with all the information
+            
         }
 
         //check if the client is connected to the server
-        if(storage.getClientSocket() == null) {
+        if(storage.getClientSocket(true) == null) {
             return;
         }
         

@@ -74,7 +74,7 @@ public class Utils {
         String type = "";
         boolean valid = false;
         do {
-            System.out.print(question + " " + colorize("(" + tooltips + ")" ,Colors.RESET) + " : ");
+            System.out.print(question + " " + colorize("(" + tooltips + ")" ,Colors.BLUE) + " : ");
             type = sc.nextLine().trim().toLowerCase();
             if (isDefault && type.equals("")) {
                 type = regex2;

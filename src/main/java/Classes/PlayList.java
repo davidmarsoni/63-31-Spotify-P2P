@@ -5,25 +5,25 @@ import utils.Colors;
 import utils.Utils;
 
 public class PlayList extends Entry {
-    private ArrayList<String> MusicFiles;
-    private String type = "playList";
+    private ArrayList<String> MusicNames; // the list of music Names
+    private String type = "playList"; // the type of the entry (musicFile or playlist) use for json serialization
 
     public PlayList() {
-        this.MusicFiles = new ArrayList<>();
+        this.MusicNames = new ArrayList<>();
     }
 
     public PlayList(String ClientAdress, int ClientPort, String path,String name, ArrayList<String> MusicFiles) {
         super(ClientAdress, ClientPort,name,path);
         
-        this.MusicFiles = MusicFiles;
+        this.MusicNames = MusicFiles;
     }
 
-    public ArrayList<String> getMusicFiles() {
-        return this.MusicFiles;
+    public ArrayList<String> getMusicNames() {
+        return this.MusicNames;
     }
 
-    public void setMusicFiles(ArrayList<String> MusicFiles) {
-        this.MusicFiles = MusicFiles;
+    public void setMusicNames(ArrayList<String> MusicFiles) {
+        this.MusicNames = MusicFiles;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class PlayList extends Entry {
             result += Utils.colorize("| ",BLUE) + Utils.colorize("host",WHITE)+ " : "+ Utils.colorize(getClientAdress(),Colors.DARK_PURPLE)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.DARK_PURPLE) +"\n";
             result += Utils.colorize("| ", BLUE) + Utils.colorize("Musics names", WHITE)+"\n";
             result += Utils.colorize("| ", BLUE) + Utils.colorize("------------", WHITE)+"\n";
-            for (String musicFile : MusicFiles) {
+            for (String musicFile : MusicNames) {
                 result += Utils.colorize("| ", BLUE) + musicFile +"\n";
             }
         }else{

@@ -3,6 +3,7 @@ package CommandsServer;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 
+import utils.LogsServer;
 import utils.StorageServer;
 
 public class PingCommand implements CommandServer {
@@ -15,9 +16,9 @@ public class PingCommand implements CommandServer {
 
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
-        storage.printLog("Ping received from client");
+        LogsServer.info("Ping received from client");
         out.println("Pong");
-        storage.printLog("Pong send to client");
+        LogsServer.info("Pong send to client");
         out.println("end");
     }
   

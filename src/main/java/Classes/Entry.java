@@ -1,10 +1,13 @@
 package Classes;
+/**
+ * Entry is a abstract class that represent a file or a playlist
+ */
 public abstract class Entry {
-    private String ClientAdress;
-    private int ClientPort;
-    private String name;
-    private String path;
-    private boolean isAvailable = true;
+    private String ClientAdress; // the adress of the client that share the file
+    private int ClientPort; // the port of the client that share the file
+    private String name; // the name of the file or the playlist
+    private String path; // the path of the file or the playlist
+    private boolean isAvailable = true; // if the file or the playlist is available or not
 
     public Entry() {
     }

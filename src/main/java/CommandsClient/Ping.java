@@ -13,6 +13,7 @@ public class Ping implements Command {
 
     @Override
     public void execute(String argument) {
+
         int numberOfPing = 1;
         if (argument != null) {
             try {
@@ -34,7 +35,7 @@ public class Ping implements Command {
         }
 
         // check if the client is connected to the server
-        if (storage.getClientSocket() == null) {
+        if (storage.getClientSocket(true) == null) {
             return;
         }
 
@@ -59,6 +60,8 @@ public class Ping implements Command {
                 while (!(response = in.readLine()).equalsIgnoreCase("end")) {
                     System.out.println(response);
                 }
+
+                Thread.sleep(1000);
             } catch (Exception e) {
                 System.err.println("Error handling client connection");
                 e.printStackTrace();

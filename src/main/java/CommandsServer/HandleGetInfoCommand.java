@@ -6,6 +6,8 @@ import Classes.Entry;
 import Classes.MusicFile;
 import Classes.PlayList;
 import utils.Colors;
+import utils.Logs;
+import utils.LogsServer;
 import utils.StorageServer;
 import utils.Utils;
 
@@ -17,7 +19,7 @@ public class HandleGetInfoCommand implements CommandServer {
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
         // wait for info from the client
-        System.out.println("Waiting for info from the client");
+        Logs.info("Waiting for name of the file to get info from the client");
         try {
             String data = in.readLine();
             String splitData[] = data.split("#");
@@ -33,7 +35,18 @@ public class HandleGetInfoCommand implements CommandServer {
             } else {
                 entry = storage.findEntryByNameAndClientAdressAndPort(name, ipAndPort[0], Integer.parseInt(ipAndPort[1]));
             }
-            File file = new File(entry.getPath());
+            File file;
+            try {
+                file = new File(entry.getPath());
+            } catch (Exception e) {
+                file = null;
+                String text = "The file " + Utils.colorize(name, Colors.GREEN) + " doesn't exist in the list of music on the server";
+                out.println(text);
+                out.println("end");
+                Logs.info(text);
+                return;
+            }
+           
 
             if (!file.isDirectory()) {
                 MusicFile musicFile;
@@ -44,33 +57,40 @@ public class HandleGetInfoCommand implements CommandServer {
                 }
 
                 if(musicFile == null){
-                    out.println("The file " + Utils.colorize(name, Colors.GREEN) + " doesn't exist in the list of music on the server");
+                    String text = "The file " + Utils.colorize(name, Colors.GREEN) + " doesn't exist in the list of music on the server";
+                    out.println(text);
                     out.println("end");
+                    Logs.info(text);
                     return;
                 }
                
                 out.println("data#file#" + musicFile.getName() + "#" + musicFile.getPath() + "#" + musicFile.getClientAdress() + "#" + musicFile.getClientPort());
+                LogsServer.info("Sending info of the file " + Utils.colorize(musicFile.getName(), Colors.GREEN) + " to the client");
             } else {
                 PlayList playList;
                 try {
                     playList = (PlayList) entry;
                 } catch (Exception e) {
                     playList = null;
+                    LogsServer.info("The playlist " + Utils.colorize(name, Colors.GREEN) + " is not a playlist");
+                    out.println("This playlist " + Utils.colorize(name, Colors.GREEN) + " dosn't exist in the on the server");
+
                 }
 
                 if(playList == null){
-                    out.println("The playlist " + Utils.colorize(name, Colors.GREEN) + " doesn't exist in the list of music on the server");
+                    String text = "The playlist " + Utils.colorize(name, Colors.GREEN) + " doesn't exist in the list of music on the server";
+                    out.println(text);
                     out.println("end");
+                    Logs.info(text);
                     return;
                 }
 
-                out.println("data#playlist#" + playList.getName() + "#" + playList.getClientAdress() + "#" + playList.getClientPort());
+                out.println("data#playlist#" + playList.getName() + "#" + playList.getPath() + "#" + playList.getClientAdress() + "#" + playList.getClientPort());
             }
 
             out.println("end");
            
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

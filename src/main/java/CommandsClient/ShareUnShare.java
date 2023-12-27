@@ -15,11 +15,10 @@ public class ShareUnShare implements Command {
     public ShareUnShare(String Type) {
         this.type = Type;
     }
-
-    //TODO : filter only music file .wav .mp3 
     @Override
     public void execute(String argument) {
-        if (storage.getClientSocket() == null || argument == null) {
+        Boolean error = false;
+        if (storage.getClientSocket(true) == null || argument == null) {
             return;
         }
 
@@ -28,19 +27,27 @@ public class ShareUnShare implements Command {
         String args[] = argument.split(" ");
 
         if (argument.contains("\"")) {
-            handleQuotedArgument(argument, args);
+            error = handleQuotedArgument(argument, args);
+        }
+
+        if (error) {
+            return;
         }
 
         if (isFile) {
-            handleFile(args);
+            error = handleFile(args);
         } else {
-            handleFolder(args);
+           error = handleFolder(args);
+        }
+
+        if (error) {
+            return;
         }
 
         sendCommandToServer();
     }
 
-    private void handleQuotedArgument(String argument, String[] args) {
+    private boolean handleQuotedArgument(String argument, String[] args) {
         int index = argument.indexOf("\"");
         int index2 = argument.indexOf("\"", index + 1);
         args[0] = argument.substring(index + 1, index2).trim();
@@ -48,39 +55,48 @@ public class ShareUnShare implements Command {
         File file = new File(args[0]);
         isFile = file.isFile();
         if (!isFile) {
-            args[1] = argument.substring(index2 + 1);
+            try{
+                args[1] = argument.substring(index2 + 1).trim();
+            }catch(Exception e){
+                System.out.println("You need to specify a folder and a name for the playlist see " + Utils.colorize("help share", Colors.YELLOW)
+                + " for more details");
+                return true;
+            }
         }
+        return false;
     }
 
-    private void handleFile(String[] args) {
+    private boolean handleFile(String[] args) {
         File file = new File(args[0].trim());
-        if (!file.exists()) {
-            System.out.println("The file " + Utils.colorize(args[0], Colors.BLUE) +" doesn't exist");
-            return;
+        if (!file.exists() && file.isFile() && !file.getName().endsWith(".mp3")) {
+            System.out.println("The file " + Utils.colorize(args[0], Colors.BLUE) +" doesn't exist or is not a mp3 file");
+            return true;
         }
 
         MusicFile musicFile = new MusicFile(storage.getLocalAdressString(), storage.getPort(), file.getName(), file.getAbsolutePath());
         updateStorage(musicFile);
 
         data = "file#" + musicFile.getName() + "#" + musicFile.getPath();
+
+        return false;
     }
 
-    private void handleFolder(String[] args) {
+    private boolean handleFolder(String[] args) {
         ArrayList<String> musicFiles = new ArrayList<>();
         File folder = new File(args[0].trim());
         File[] listOfFiles = folder.listFiles();
         if (!folder.exists() || listOfFiles.length == 0) {
             System.out.println("The folder " +Utils.colorize(args[0], Colors.BLUE)+ " doesn't exist or is empty");
-            return;
+            return true;
         }
         for (File file : listOfFiles) {
-            if (file.isFile()) {
+            if (file.isFile() && file.getName().endsWith(".mp3")) {
                 MusicFile musicFile = new MusicFile(storage.getLocalAdressString(), storage.getPort(), file.getName(), file.getAbsolutePath());
                 musicFiles.add(musicFile.getName());
             }
         }
 
-        PlayList playList = new PlayList(storage.getLocalAdressString(), storage.getPort(), args[0].trim(), args[1], musicFiles);
+        PlayList playList = new PlayList(storage.getLocalAdressString(), storage.getPort(), args[0].trim(), args[1].trim(), musicFiles);
         updateStorage(playList);
 
         data = "playlist#" + playList.getName() + "#" + playList.getPath();
@@ -88,6 +104,8 @@ public class ShareUnShare implements Command {
         for (String musicFile : musicFiles) {
             data += "#" + musicFile;
         }
+
+        return false;
     }
 
     private void updateStorage(Entry entry) {

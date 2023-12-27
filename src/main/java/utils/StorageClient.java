@@ -23,9 +23,6 @@ public class StorageClient extends Storage {
     // client part
     private InetAddress serverAddress;
     private int serverPort = 45000;
-    private Socket clientSocket;
-
-    // listening part (server)
 
     private StorageClient() {
         try {
@@ -57,8 +54,9 @@ public class StorageClient extends Storage {
     }
 
     public void save() {
+        String fileName = "storageClient"+getLocalAdress().getHostAddress()+"_"+getPort()+".json";
         try {
-            PrintWriter writer = new PrintWriter("storageClient.json");
+            PrintWriter writer = new PrintWriter(fileName);
             Gson gson = new Gson();
             // create a object to store the data
             ClientData client = new ClientData();
@@ -76,7 +74,8 @@ public class StorageClient extends Storage {
     }
 
     public void load() {
-        File file = new File("storageClient.json");
+        String fileName = "storageClient"+getLocalAdress().getHostAddress()+"_"+getPort()+".json";
+        File file = new File(fileName);
         if (file.exists()) {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file));
@@ -150,7 +149,7 @@ public class StorageClient extends Storage {
     }
 
     public Socket getClientSocket(Boolean print) {
-        if (clientSocket == null && print) {
+        if (getClientSocket() == null && print) {
             System.out.println("You are not connected to a server, please use the command " + Colors.YELLOW + "connect"
                     + Colors.RESET + " to connect to a server");
             return null;
@@ -180,7 +179,7 @@ public class StorageClient extends Storage {
 
     public void closeClientSocket() {
         try {
-            clientSocket.close();
+            getClientSocket().close();
         } catch (IOException e) {
             e.printStackTrace();
         }

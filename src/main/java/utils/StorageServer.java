@@ -48,9 +48,6 @@ public class StorageServer extends Storage{
         getServerCommands().put("end", new EndCommand());
         getServerCommands().put("ping", new PingCommand());
         getServerCommands().put("getInfo", new HandleGetInfoCommand());
-
-        //TODO : Remove this
-        getSharedEntries().add(new MusicFile("129.168.102.344", 64532, "Cave-v2.mp3", "Todo"));
     }
 
     public void updateClientEntry(Boolean isAvailable) {
@@ -93,10 +90,5 @@ public class StorageServer extends Storage{
     }
     public LinkedList<Client> getClients() {
         return clients;
-    }
-    public void printLog(String message) {
-        String log = "["+getCurrentSocket().getInetAddress().getHostAddress()+":"+getCurrentSocket().getPort()+"] "+message;
-        Logs.info(log);
-        System.out.println(log);
     }
 }

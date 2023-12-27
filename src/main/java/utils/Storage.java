@@ -179,7 +179,8 @@ public class Storage {
 
     public Entry findEntryByName(String name) {
         for (Entry entry : entries) {
-            if (entry.getName().equals(name)) {
+            String entryName = entry.getName();
+            if (entryName.equals(name)) {
                 return entry;
             }
         }

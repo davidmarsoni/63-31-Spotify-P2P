@@ -2,8 +2,11 @@ package Classes;
 import utils.Colors;
 import utils.Utils;
 
+/**
+ * This class is use to store information about a music file
+ */
 public class MusicFile extends Entry {
-    private String type = "musicFile";
+    private String type = "musicFile"; // the type of the entry (musicFile or playlist) use for json serialization
 
     public MusicFile() {
       

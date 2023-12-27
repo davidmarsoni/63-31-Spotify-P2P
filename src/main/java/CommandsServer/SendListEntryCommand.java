@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import Classes.Entry;
 import utils.Colors;
+import utils.LogsServer;
 import utils.StorageServer;
 import utils.Utils;
 
@@ -17,7 +18,7 @@ public class SendListEntryCommand implements CommandServer{
             //TODO : send the details of the file by it file name
         }
 
-        storage.printLog("Sending list of music to client:");
+        LogsServer.info("Sending list of music to client:");
         
         //for each entry send the data to the client
         out.println(Utils.colorize("| ",Colors.BLUE)+Utils.colorize(String.format("%-24s", "hosts IPs and port"),Colors.WHITE)+Utils.colorize(" | ",Colors.BLUE)+Utils.colorize(String.format("%-20s", "file name"),Colors.WHITE));
@@ -28,7 +29,7 @@ public class SendListEntryCommand implements CommandServer{
             }
         }
         //send the end of the list
-        storage.printLog("List of music sent");
+        LogsServer.info("List of music sent");
         out.println("end");
     }
 

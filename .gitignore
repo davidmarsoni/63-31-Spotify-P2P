@@ -44,4 +44,7 @@ buildNumber.properties
 *.iws
 out/
 
-.VSCodeCounter/
+/.VSCodeCounter/
+/logs/
+/tests/
+*.json

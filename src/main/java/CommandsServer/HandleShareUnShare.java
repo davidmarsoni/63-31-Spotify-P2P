@@ -7,8 +7,11 @@ import Classes.Entry;
 import Classes.MusicFile;
 import Classes.PlayList;
 import utils.Colors;
+import utils.Logs;
+import utils.LogsServer;
 import utils.Utils;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class HandleShareUnShare implements CommandServer {
     private utils.StorageServer storage = utils.StorageServer.getInstance();
@@ -20,9 +23,11 @@ public class HandleShareUnShare implements CommandServer {
 
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
+        
         // get the data from the client input not the argument
         try {
             String data = in.readLine();
+            LogsServer.info("Share command received from client");
             // split the data to get the type of the share and the name of the file or
             // playlist
             String[] splitData = data.split("#");
@@ -37,11 +42,15 @@ public class HandleShareUnShare implements CommandServer {
                             && entry.getClientAdress().equals(file.getClientAdress())
                             && entry.getClientPort() == file.getClientPort()) {
                         if (type.equals("share")) {
-                            out.println("The file " + Utils.colorize(file.getName(), Colors.GREEN)
-                                    + " already exist in the list of music on the server");
+                            String text = "The file " + Utils.colorize(file.getName(), Colors.GREEN)
+                                    + " already exist in the list of music on the server";
+                            out.println(text);
+                            Logs.info(text);
                         } else {
-                            out.println("Music file " + Utils.colorize(file.getName(), Colors.GREEN)
-                                    + " removed from the list of music");
+                            String text = "The file " + Utils.colorize(file.getName(), Colors.GREEN)
+                                    + " removed from the list of music";
+                            out.println(text);
+                            Logs.info(text);
                             storage.removeSharedEntry(entry);
                         }
                         out.println("end");
@@ -51,12 +60,16 @@ public class HandleShareUnShare implements CommandServer {
                 if (type.equals("share")) {
                     // add the file to the list of music
                     storage.addSharedEntry(file);
-                    out.println("Music file " + Utils.colorize(file.getName(), Colors.GREEN)
-                            + " added to the list of music");
+                    String text = "Music file " + Utils.colorize(file.getName(), Colors.GREEN)
+                            + " added to the list of music";
+                    out.println(text);
+                    Logs.info(text);
 
                 } else {
-                    out.println("The file " + Utils.colorize(file.getName(), Colors.GREEN)
-                            + " doesn't exist in the list of music on the server");
+                    String text = "The file " + Utils.colorize(file.getName(), Colors.GREEN)
+                            + " doesn't exist in the list of music on the server";
+                    out.println(text); 
+                    Logs.info(text);
                 }
                 out.println("end");
 
@@ -83,12 +96,16 @@ public class HandleShareUnShare implements CommandServer {
                             && entry.getClientAdress().equals(storage.getCurrentClientAddress())
                             && entry.getClientPort() == storage.getCurrentClientPort()) {
                         if (type.equals("share")) {
-                            out.println("The playlist " + Utils.colorize(playlistName, Colors.GREEN)
-                                    + " already exist in the list of music on the server");
+                            String text = "The playlist " + Utils.colorize(playlistName, Colors.GREEN)
+                                    + " already exist in the list of music on the server";
+                            out.println(text);
+                            Logs.info(text);
                         } else {
-                            out.println("Playlist " + Utils.colorize(playlistName, Colors.GREEN)
-                                    + " removed from the list of music");
+                            String text = "The playlist " + Utils.colorize(playlistName, Colors.GREEN)
+                                    + " removed from the list of music";
+                            out.println(text);
                             storage.removeSharedEntry(entry);
+                            Logs.info(text);
                         }
                         out.println("end");
                         return;
@@ -99,22 +116,26 @@ public class HandleShareUnShare implements CommandServer {
                 if (type.equals("share")) {
                     // add the playlist to the list of music
                     storage.addSharedEntry(playlist);
-                    out.println("Playlist " + Utils.colorize(playlistName, Colors.GREEN)
-                            + " added to the list of music");
+                    String text = "Playlist " + Utils.colorize(playlistName, Colors.GREEN)
+                            + " added to the list of music";
+                    out.println(text);
+                    Logs.info(text);
                 } else {
-                    out.println("The playlist " + Utils.colorize(playlistName, Colors.GREEN)
-                            + " doesn't exist in the list of music on the server");
+                    String text = "The playlist " + Utils.colorize(playlistName, Colors.GREEN)
+                            + " doesn't exist in the list of music on the server";
+                    out.println(text);
+                    Logs.info(text);
                 }
                 out.println("end");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
+           LogsServer.log(Level.SEVERE, "Error handling client connection", false);
         }
     }
 
     @Override
     public String help() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException(
                 "This command is a superCommand and doesn't have a help method it just there to avoid code duplication");
     }

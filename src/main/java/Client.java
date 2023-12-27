@@ -15,6 +15,10 @@ public class Client {
     public static void main(String[] args) {
         Utils.renderStart(false);
         // load the data
+
+        Command cmd = commands.get("init"); //TODO rework to be able to pass a file for the init or to use the default one
+        
+        cmd.execute(null);
         loop();
     }
 
@@ -52,7 +56,7 @@ public class Client {
         Thread listeningThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                storage.setSrvSocket(ServerManagement.initializedServerSocket(storage.getPort()));
+                storage.setSrvSocket(ServerManagement.initializedServerSocket("eth0", storage.getPort(), 10, 180000, false));
                 while (true) {
                     ServerManagement.handleNewConnection(storage.getSrvSocket(), storage, false);
                 }

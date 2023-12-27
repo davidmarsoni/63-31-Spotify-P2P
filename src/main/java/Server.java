@@ -3,6 +3,7 @@ import java.net.*;
 import java.util.*;
 
 import CommandsServer.CommandServer;
+import java.util.logging.Level;
 import utils.*;
 
 public class Server {
@@ -31,6 +32,7 @@ public class Server {
                     storage.setClientSocket(srvSocket);
                     System.out.println(
                         "Connection accepted from " + storage.getClientSocket().getInetAddress().getHostAddress() + ":" + storage.getClientSocket().getPort());
+                    LogsServer.log(Level.INFO, "Connection accepted from " + storage.getClientSocket().getInetAddress().getHostAddress() + ":" + storage.getClientSocket().getPort(),false);
                     // listen command from client
                     try {
                         BufferedReader in = new BufferedReader(
@@ -49,8 +51,7 @@ public class Server {
                             if (cmd != null) {
                                 cmd.execute(argument, in, out);
                             } else {
-                                storage.printLog(
-                                        "Command not found " + Utils.colorize(command, Colors.YELLOW));
+                                LogsServer.log(Level.WARNING,"Command not found " + Utils.colorize(command, Colors.YELLOW));
                                 // respond to the client
                                 out.println("Command not found " + Utils.colorize(command, Colors.YELLOW));
                                 out.println("end");
@@ -59,8 +60,8 @@ public class Server {
                         }
 
                     } catch (Exception e) {
-                        Utils.title("Client :"+storage.getCurrentSocket().getInetAddress().getHostAddress()+":"+ storage.getCurrentSocket().getPort() + " disconnected",Colors.RED_H);
-                        e.printStackTrace();
+                        LogsServer.log(Level.SEVERE, Utils.colorize("Error handling client connection", Colors.RED_H),false);
+                        //e.printStackTrace();
                         storage.updateClientEntry(false);
                     }
 
