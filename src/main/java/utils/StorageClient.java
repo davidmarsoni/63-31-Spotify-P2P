@@ -204,5 +204,16 @@ public class StorageClient extends Storage {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void listSharedEntries() {
+        if (getSharedEntries().size() == 0) {
+            System.out.println("You don't have any shared entries");
+        } else {
+            System.out.println("You have " + getSharedEntries().size() + " shared entries");
+            for (Entry entry : getSharedEntries()) {
+                System.out.println(entry.toString());
+            }
+        }
     }   
 }
