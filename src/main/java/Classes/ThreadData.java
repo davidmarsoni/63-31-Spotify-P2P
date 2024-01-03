@@ -1,9 +1,11 @@
-package utils;
+package Classes;
 
 import java.net.InetAddress;
 
 import java.net.Socket;
-
+/**
+ * This class is use to store information about a client connected to a server with a socket
+ */
 public class ThreadData {
     private Socket socket;
     private InetAddress address;

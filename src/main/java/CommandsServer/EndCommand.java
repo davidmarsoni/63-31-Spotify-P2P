@@ -2,9 +2,11 @@ package CommandsServer;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.logging.Level;
 
 import Classes.Client;
 import utils.Colors;
+import utils.LogsServer;
 import utils.StorageServer;
 import utils.Utils;
 
@@ -20,8 +22,10 @@ public class EndCommand implements CommandServer {
             out.close();
             client.setAvailable(false);
             storage.updateClient(client);
+            LogsServer.log(Level.INFO,Utils.colorize("Connection closed for client : " + client.getClientAdress().getHostAddress() + ":" + client.getClientPort(), Colors.RED_H),false);
             storage.removeCurrentThreadData();
-            Utils.title("Connection closed for client : " + client.getClientAdress().getHostAddress() + ":" + client.getClientPort(), Colors.RED_H);
+            //stop the current thread
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
             e.printStackTrace();
         }

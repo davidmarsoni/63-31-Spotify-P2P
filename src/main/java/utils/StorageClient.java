@@ -19,6 +19,7 @@ import CommandsServer.StreamEntry;
 
 public class StorageClient extends Storage {
     private static StorageClient instance;
+    private String savePath = "storageClient.json";
 
     // client part
     private InetAddress serverAddress;
@@ -44,19 +45,32 @@ public class StorageClient extends Storage {
        
     }
 
+    public String getSavePath() {
+        return this.savePath;
+    }
+
+    public boolean setSavePath(String savePath) {
+        if(savePath.endsWith(".json")){
+            this.savePath = savePath;
+            return true;
+        }else{
+            System.out.println("Invalid file format, the file must be a json file");
+            return false;
+        }
+        
+    }
+    
     public static StorageClient getInstance() {
         if (instance == null) {
             instance = new StorageClient();
-            instance.load();
-        
+            instance.initCommands();
         }
         return instance;
     }
 
-    public void save() {
-        String fileName = "storageClient"+getLocalAdress().getHostAddress()+"_"+getPort()+".json";
+    public void save() { 
         try {
-            PrintWriter writer = new PrintWriter(fileName);
+            PrintWriter writer = new PrintWriter(getSavePath());
             Gson gson = new Gson();
             // create a object to store the data
             ClientData client = new ClientData();
@@ -74,8 +88,8 @@ public class StorageClient extends Storage {
     }
 
     public void load() {
-        String fileName = "storageClient"+getLocalAdress().getHostAddress()+"_"+getPort()+".json";
-        File file = new File(fileName);
+       
+        File file = new File(getSavePath());
         if (file.exists()) {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file));
@@ -105,7 +119,15 @@ public class StorageClient extends Storage {
                 }
                 // set the data to the storage
                 setLocalAdress(client.clientAddress);
-                setPort(client.listeningPort);
+                do {
+                    //test the port
+                    if(setPort(client.listeningPort)){
+                        break;
+                    }
+                    client.listeningPort = Integer.parseInt(Utils.ask("Set the Listening port", String.valueOf(client.listeningPort), "^([0-9]{1,4}|[0-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6])$", String.valueOf(client.listeningPort), true));
+
+                } while (true);
+                
                 serverAddress = client.serverAddress;
                 serverPort = client.serverPort;
                 setSharedEntries(client.entries);
@@ -118,7 +140,6 @@ public class StorageClient extends Storage {
         } else {
             save();
         }
-        initCommands();
     }
 
     private void initCommands() {
@@ -183,5 +204,5 @@ public class StorageClient extends Storage {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }   
 }

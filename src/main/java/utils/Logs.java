@@ -40,8 +40,7 @@ public class Logs {
                     return String.format(format,
                             sdf.format(new Date(lr.getMillis())),
                             lr.getLevel().getLocalizedName(),
-                            lr.getMessage().replaceAll("\u001B\\[[;\\d]*m", "")
-                    );
+                            lr.getMessage().replaceAll("\u001B\\[[;\\d]*m", ""));
                 }
             };
 
@@ -54,8 +53,7 @@ public class Logs {
                     return String.format(format,
                             sdf.format(new Date(lr.getMillis())),
                             lr.getLevel().getLocalizedName(),
-                            lr.getMessage()
-                    );
+                            lr.getMessage());
                 }
             };
 
@@ -75,7 +73,7 @@ public class Logs {
     }
 
     public static void severe(String message) {
-        logger.log(Level.SEVERE, message);
+        logger.log(Level.INFO, message);
     }
 
     public static void log(Level level, String message) {

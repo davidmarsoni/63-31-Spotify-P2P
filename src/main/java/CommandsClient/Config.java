@@ -13,13 +13,16 @@ public class Config implements Command {
     public void execute(String argument) {
         Utils.titleDesc("Current config", "Display the configuration of the client");
         System.out.println("Me     : " +
-                Utils.colorize(storage.getLocalAdressString(), Colors.DARK_PURPLE) +
+                Utils.colorize(storage.getLocalAdressString(), Colors.PURPLE) +
                 ":" +
-                Utils.colorize(String.valueOf(storage.getPort()), Colors.DARK_PURPLE));
+                Utils.colorize(String.valueOf(storage.getPort()), Colors.PURPLE));
         System.out.println("Server : " +
-                Utils.colorize(storage.getServerAddress(), Colors.DARK_PURPLE) +
+                Utils.colorize(storage.getServerAddress(), Colors.PURPLE) +
                 ":" +
-                Utils.colorize(String.valueOf(storage.getServerPort()), Colors.DARK_PURPLE));
+                Utils.colorize(String.valueOf(storage.getServerPort()), Colors.PURPLE));
+        //get current saved path
+        System.out.println("Save path : " +
+                Utils.colorize(storage.getSavePath(), Colors.BLUE));
         // list all the entries shared by the client
         if (storage.getSharedEntries().isEmpty()) {
             System.out.println("No shared entries");

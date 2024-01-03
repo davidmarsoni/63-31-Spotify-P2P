@@ -2,12 +2,9 @@ package CommandsServer;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import Classes.Entry;
 import Classes.PlayList;
-import CommandsClient.Play;
-
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -18,14 +15,13 @@ import utils.Colors;
 import utils.StorageClient;
 import utils.Utils;
 
-// TODO : do logs
 public class StreamEntry implements CommandServer {
     private StorageClient storage = StorageClient.getInstance();
 
     @Override
     public void execute(String argument, BufferedReader in, PrintWriter out) {
-        out.println("connected to the  " + Utils.colorize(storage.getServerAddress(), Colors.DARK_PURPLE) + ":"
-                + Utils.colorize(String.valueOf(storage.getServerPort()), Colors.DARK_PURPLE));
+        out.println("connected to the host " + Utils.colorize(storage.getServerAddress(), Colors.PURPLE) + ":"
+                + Utils.colorize(String.valueOf(storage.getServerPort()), Colors.PURPLE));
 
         try {
             String[] data = in.readLine().split("#");
@@ -41,7 +37,6 @@ public class StreamEntry implements CommandServer {
             out.println("start");
 
             if (type.equals("playlist")) {
-                
                 PlayList playlist = (PlayList) entry;
                 DataOutputStream dos = new DataOutputStream(
                         new BufferedOutputStream(storage.getCurrentSocket().getOutputStream()));

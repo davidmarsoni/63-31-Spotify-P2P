@@ -3,15 +3,14 @@ package Classes;
 import java.net.InetAddress;
 /**
  * This class is use to store information about a client
- * this class is juste use for storage on the server side
  */
 public class Client {
-    private InetAddress ClientAdress;
-    private int ClientPort;
+    private InetAddress ClientAdress; 
+    private int ClientPort; 
     private Boolean isAvailable = true;	
 
-    public Client() {
-    }
+    public Client() {}
+
     public Client(InetAddress ClientAdress, int ClientPort) {
         this.ClientAdress = ClientAdress;
         this.ClientPort = ClientPort;

@@ -6,11 +6,13 @@ import utils.Utils;
  * This class is use to store information about a music file
  */
 public class MusicFile extends Entry {
-    private String type = "musicFile"; // the type of the entry (musicFile or playlist) use for json serialization
+    /**
+     * The type of the entry use for json serialization
+     */
+    private String type = "musicFile";
 
-    public MusicFile() {
-      
-    }
+    public MusicFile() {}
+
     public MusicFile(String ClientAdress, int ClientPort, String name, String path) {
         super(ClientAdress, ClientPort,name,path);
     }
@@ -25,11 +27,9 @@ public class MusicFile extends Entry {
         String WHITE = Colors.WHITE;
         String GREEN = Colors.GREEN;
 
-
         if (complete) {
             result= Utils.colorize("| ",BLUE) + Utils.colorize("MusicFile", WHITE)+ " : "+ Utils.colorize(getName(), GREEN) +"\n";
-            result += Utils.colorize("| ", BLUE) + Utils.colorize("host", WHITE)+ " : "+ Utils.colorize(getClientAdress(),GREEN)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.DARK_PURPLE) +"\n";
-            result += Utils.colorize("| ", BLUE) + Utils.colorize("host", WHITE)+ " : "+ Utils.colorize(getPath(),Colors.DARK_PURPLE) +"\n";
+            result += Utils.colorize("| ", BLUE) + Utils.colorize("host", WHITE)+ " : "+ Utils.colorize(getClientAdress(),Colors.PURPLE)+ ":" + Utils.colorize(String.valueOf(getClientPort()), Colors.PURPLE) +"\n";
         }else{
             result = Utils.colorize(getName(), GREEN);
         }

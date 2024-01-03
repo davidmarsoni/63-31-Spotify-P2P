@@ -10,18 +10,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import java.net.Socket;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-import Classes.PlayList;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
-import java.io.FileOutputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
@@ -30,44 +24,46 @@ public class Play implements Command {
 
     @Override
     public void execute(String argument) {
-        String fileName = "";
-        String ipAndPort = "";
-        String data = "";
-        // verifications
-        if (storage.getClientSocket(true) == null) {
-            return;
-        }
-        if (argument == null) {
+        if (storage.getClientSocket(true) == null || argument == null) {
             System.out.println("You need to specify a file name see " + Utils.colorize("help play", Colors.YELLOW)
                     + " for more details");
             return;
         }
 
-        if (argument.contains("\"")) {
-            fileName = argument.substring(argument.indexOf("\"") + 1, argument.lastIndexOf("\""));
-            if (argument.substring(argument.lastIndexOf("\"") + 1).trim().length() > 0) {
-                ipAndPort = argument.substring(argument.lastIndexOf("\"") + 1).trim();
-            }
-            data = fileName + "#" + ipAndPort;
-        } else {
-            String args[] = argument.split(" ");
-            fileName = args[0];
-            data = fileName;
-            if (args.length > 1) {
-                ipAndPort = args[1];
-                data += "#" + ipAndPort;
-            }
+        String name = null;
+        String clientAddress = null;
+        int clientPort = 0;
+        String[] splitArgument = null;
 
+        // Check if argument starts with a quote (single or double)
+        if (argument.startsWith("\"") || argument.startsWith("'")) {
+            // Find the closing quote
+            int endQuoteIndex = argument.indexOf(argument.charAt(0), 1);
+            if (endQuoteIndex != -1) {
+                // Extract the name and remove the quotes
+                name = argument.substring(1, endQuoteIndex);
+                // Split the rest of the argument
+                splitArgument = argument.substring(endQuoteIndex + 1).trim().split(" ");
+            }
+        } else {
+            // If no quotes, split the argument as before
+            splitArgument = argument.split(" ");
+            name = splitArgument[0];
         }
 
+        if (splitArgument != null && splitArgument.length == 2) {
+            String[] addressPort = splitArgument[1].split(":");
+            clientAddress = addressPort[0];
+            clientPort = Integer.parseInt(addressPort[1]);
+        }
+
+        String data = name + (clientAddress != null ? "#" + clientAddress + ":" + clientPort : "");
+
         try {
-            if (ipAndPort.length() > 0) {
-                System.out.println("Try to get information about " + fileName + " on this host " + ipAndPort);
-            } else {
-                System.out.println("Try to get information about " + fileName + " from the server "
-                        + storage.getServerAddress() + ":"
-                        + storage.getServerPort());
-            }
+            System.out.println("Try to get information about " + Utils.colorize(name, Colors.GREEN)
+                    + (clientAddress != null ? " on this host " + Utils.colorize(clientAddress + ":" + clientPort, Colors.PURPLE) : " from the server "
+                    + storage.getServerAddress() + ":"
+                    + storage.getServerPort()));
 
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(storage.getClientSocket().getInputStream()));
@@ -76,15 +72,14 @@ public class Play implements Command {
             // send the command to the server
             out.println("getInfo");
             out.println(data);
-            // listen the response from the server
-            String response = "";
 
-            // wait for the end of the list
+            // listen the response from the server
+            String response;
             while (!(response = in.readLine()).equalsIgnoreCase("end")) {
                 String reponseParts[] = response.split("#");
                 if (reponseParts[0].equalsIgnoreCase("data")) {
                     System.out.println("The " + reponseParts[1] + " " + Utils.colorize(reponseParts[2], Colors.GREEN)
-                            + " is available on the host " + reponseParts[4] + ":" + reponseParts[5]);
+                            + " is available on the host " + Utils.colorize(reponseParts[4], Colors.PURPLE) + ":" + Utils.colorize(reponseParts[5], Colors.PURPLE));
                     if (reponseParts[1].equalsIgnoreCase("file")) {
                         System.out.println("Trying to stream the file");
                     } else if (reponseParts[1].equalsIgnoreCase("playlist")) {
@@ -112,7 +107,7 @@ public class Play implements Command {
             out.println(type + "#" + name + "#" + path);
             String response = "";
             while (!(response = in.readLine()).equalsIgnoreCase("start")) {
-                System.out.println(response); // TODO Correc bug disconnecting
+                System.out.println(response);
             }
 
             if (type.equalsIgnoreCase("file")) {
@@ -184,7 +179,7 @@ public class Play implements Command {
                 + " to play the file test.mp3 from the server\n"
                 + "          " + Utils.colorize("play ", Colors.YELLOW)
                 + Utils.colorize("\"music for test.mp3\"", Colors.GREEN) + " "
-                + Utils.colorize("192.169.1.10", Colors.DARK_PURPLE) + ":" + Utils.colorize("12345", Colors.DARK_PURPLE)
+                + Utils.colorize("192.169.1.10", Colors.PURPLE) + ":" + Utils.colorize("12345", Colors.PURPLE)
                 + " to play the file test.mp3 from a specific person\n";
         return help;
     }

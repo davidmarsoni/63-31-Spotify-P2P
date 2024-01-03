@@ -9,9 +9,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Enumeration;
 
+import Classes.ThreadData;
 import CommandsServer.CommandServer;
 
-//TODO : allow to pass a Logger class to the server management to be able to fit the server code inside a same class
 public class ServerManagement {
 
     public static ServerSocket initializedServerSocket(int port) {
@@ -77,21 +77,20 @@ public class ServerManagement {
         
         try {
             Socket currentServerSocket = storage.getSrvSocket().accept();
-
             new Thread(() -> {
                 ThreadData threadData = new ThreadData(currentServerSocket);
                 storage.addThreadData(threadData);
-                storage.setClientSocket(currentServerSocket);
+                storage.getCurrentThreadsData().setSocket(currentServerSocket);
                 if (verbose) {
                     System.out.println(
-                            "Connection accepted from " + storage.getClientSocket().getInetAddress().getHostAddress()
-                                    + ":" + storage.getClientSocket().getPort());
+                            "Connection accepted from " + storage.getCurrentSocket().getInetAddress().getHostAddress()
+                                    + ":" + storage.getCurrentSocket().getPort());
                 }
                 // listen command from client
                 try {
                     BufferedReader in = new BufferedReader(
-                            new InputStreamReader(storage.getClientSocket().getInputStream()));
-                    PrintWriter out = new PrintWriter(storage.getClientSocket().getOutputStream(), true);
+                            new InputStreamReader(storage.getCurrentSocket().getInputStream()));
+                    PrintWriter out = new PrintWriter(storage.getCurrentSocket().getOutputStream(), true);
                     while (true) {
                         if (verbose) {
                             System.out.println("Waiting for a command from client");
@@ -117,7 +116,6 @@ public class ServerManagement {
                     if (verbose) {
                         Utils.title("Client :" + storage.getCurrentSocket().getInetAddress().getHostAddress() + ":"
                                 + storage.getCurrentSocket().getPort() + " disconnected", Colors.RED_H);
-                        e.printStackTrace();
                     }
                 }
 

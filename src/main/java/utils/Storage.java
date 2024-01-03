@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import Classes.Entry;
+import Classes.ThreadData;
 import CommandsClient.Command;
 import CommandsServer.CommandServer;
 
@@ -29,8 +31,30 @@ public class Storage {
         return this.port;
     }
 
-    public void setPort(int port) {
+    public boolean setPort(int port) {
+        if (!isValidPort(port)) {
+            System.out.println("Invalid port, listeming port for the client must be between 0 and 65535");
+            return false;
+        }
+        if(isPortUsed(port)){
+            System.out.println("This port is already used");
+            return false;
+        }
+
         this.port = port;
+        return true;
+    }
+
+    private boolean isPortUsed(int port) {
+        boolean isUsed = false;
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            // If the ServerSocket is successfully created, then the port is not in use
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            // If an exception is thrown, then the port is in use
+            isUsed = true;
+        }
+        return isUsed;
     }
 
     public InetAddress getLocalAdress() {
@@ -79,35 +103,17 @@ public class Storage {
 
     public void addSharedEntry(Entry entry) {
         // test if the entry is already in the list
-        for (Entry entry2 : entries) {
-            if (entry2.getName().equals(entry.getName()) && entry2.getPath().equals(entry.getPath())) {
-                return;
-            }
+        boolean exists = entries.stream().anyMatch(e -> e.getName().equals(entry.getName()) && e.getPath().equals(entry.getPath()));
+        if (!exists) {
+            entries.add(entry);
         }
-        entries.add(entry);
     }
 
     public void removeSharedEntry(Entry entry) {
-        for (Entry entry2 : entries) {
-            if (entry2.getName().equals(entry.getName()) && entry2.getPath().equals(entry.getPath())) {
-                entries.remove(entry2);
-                return;
-            }
-        }
+        entries.removeIf(e -> e.getName().equals(entry.getName()) && e.getPath().equals(entry.getPath()));
     }
 
-    public void listSharedEntries() {
-        StringBuilder sb = new StringBuilder();
-        for (Object entry : entries) {
-            sb.append(entry.toString()).append(" , ");
-        }
-        // Remove the last comma and space
-        if (sb.length() > 0) {
-            sb.setLength(sb.length() - 2);
-        }
-        System.out.println(sb.toString());
-    }
-
+    
     public LinkedList<Entry> getSharedEntries() {
         return entries;
     }
@@ -178,22 +184,16 @@ public class Storage {
     }
 
     public Entry findEntryByName(String name) {
-        for (Entry entry : entries) {
-            String entryName = entry.getName();
-            if (entryName.equals(name)) {
-                return entry;
-            }
-        }
-        return null;
+        return entries.stream()
+                      .filter(entry -> entry.getName().equals(name))
+                      .findFirst()
+                      .orElse(null);
     }
 
     public Entry findEntryByNameAndClientAdressAndPort(String name, String clientAdress, int clientPort) {
-        for (Entry entry : entries) {
-            if (entry.getName().equals(name) && entry.getClientAdress().equals(clientAdress)
-                    && entry.getClientPort() == clientPort) {
-                return entry;
-            }
-        }
-        return null;
+        return entries.stream()
+                      .filter(entry -> entry.getName().equals(name) && entry.getClientAdress().equals(clientAdress) && entry.getClientPort() == clientPort)
+                      .findFirst()
+                      .orElse(null);
     }
 } 

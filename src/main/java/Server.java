@@ -4,6 +4,8 @@ import java.util.*;
 
 import CommandsServer.CommandServer;
 import java.util.logging.Level;
+
+import Classes.ThreadData;
 import utils.*;
 
 public class Server {
@@ -13,11 +15,16 @@ public class Server {
     static Map<String, CommandServer> commands = storage.getServerCommands();
 
     public static void main(String[] args) {
+        start();
+    }
+
+    public static void start() {
         Utils.renderStart(true);
         storage.setSrvSocket(ServerManagement.initializedServerSocket(storage.getPort()));
         loop();
     }
 
+    //correct client socket  for multi thread
     public static void loop() {
         commands.get("help").execute(null, null, null);
         while (true) {
@@ -30,8 +37,6 @@ public class Server {
                     ThreadData threadData = new ThreadData(srvSocket);
                     storage.addThreadData(threadData);
                     storage.setClientSocket(srvSocket);
-                    System.out.println(
-                        "Connection accepted from " + storage.getClientSocket().getInetAddress().getHostAddress() + ":" + storage.getClientSocket().getPort());
                     LogsServer.log(Level.INFO, "Connection accepted from " + storage.getClientSocket().getInetAddress().getHostAddress() + ":" + storage.getClientSocket().getPort(),false);
                     // listen command from client
                     try {
@@ -39,7 +44,9 @@ public class Server {
                                 new InputStreamReader(storage.getClientSocket().getInputStream()));
                         PrintWriter out = new PrintWriter(storage.getClientSocket().getOutputStream(), true);
                         while (true) {
-                            System.out.println("Waiting for a command from client");
+                            if (Thread.currentThread().isInterrupted()) {
+                                return;
+                            }
                             // get the command
                             String[] words = in.readLine().split(" ");
                             String command = words[0];

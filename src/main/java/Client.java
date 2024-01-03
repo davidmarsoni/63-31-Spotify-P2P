@@ -13,12 +13,16 @@ public class Client {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Utils.renderStart(false);
-        // load the data
+        start();
+    }
 
-        Command cmd = commands.get("init"); //TODO rework to be able to pass a file for the init or to use the default one
-        
+    public static void start(){
+        Utils.renderStart(false);
+    
+        Command cmd = commands.get("init"); 
         cmd.execute(null);
+
+        Utils.title("Client is ready", Colors.GREEN_H);
         loop();
     }
 
@@ -58,7 +62,7 @@ public class Client {
             public void run() {
                 storage.setSrvSocket(ServerManagement.initializedServerSocket("eth0", storage.getPort(), 10, 180000, false));
                 while (true) {
-                    ServerManagement.handleNewConnection(storage.getSrvSocket(), storage, false);
+                    ServerManagement.handleNewConnection(storage.getSrvSocket(), storage,false);
                 }
             }
         });

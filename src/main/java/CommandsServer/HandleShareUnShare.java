@@ -7,7 +7,6 @@ import Classes.Entry;
 import Classes.MusicFile;
 import Classes.PlayList;
 import utils.Colors;
-import utils.Logs;
 import utils.LogsServer;
 import utils.Utils;
 import java.util.ArrayList;
@@ -42,15 +41,15 @@ public class HandleShareUnShare implements CommandServer {
                             && entry.getClientAdress().equals(file.getClientAdress())
                             && entry.getClientPort() == file.getClientPort()) {
                         if (type.equals("share")) {
-                            String text = "The file " + Utils.colorize(file.getName(), Colors.GREEN)
+                            String text = "Music file " + Utils.colorize(file.getName(), Colors.GREEN)
                                     + " already exist in the list of music on the server";
                             out.println(text);
-                            Logs.info(text);
+                            LogsServer.info(text);
                         } else {
-                            String text = "The file " + Utils.colorize(file.getName(), Colors.GREEN)
+                            String text = "Music file " + Utils.colorize(file.getName(), Colors.GREEN)
                                     + " removed from the list of music";
                             out.println(text);
-                            Logs.info(text);
+                            LogsServer.info(text);
                             storage.removeSharedEntry(entry);
                         }
                         out.println("end");
@@ -63,13 +62,13 @@ public class HandleShareUnShare implements CommandServer {
                     String text = "Music file " + Utils.colorize(file.getName(), Colors.GREEN)
                             + " added to the list of music";
                     out.println(text);
-                    Logs.info(text);
+                    LogsServer.info(text);
 
                 } else {
                     String text = "The file " + Utils.colorize(file.getName(), Colors.GREEN)
                             + " doesn't exist in the list of music on the server";
                     out.println(text); 
-                    Logs.info(text);
+                    LogsServer.info(text);
                 }
                 out.println("end");
 
@@ -96,16 +95,16 @@ public class HandleShareUnShare implements CommandServer {
                             && entry.getClientAdress().equals(storage.getCurrentClientAddress())
                             && entry.getClientPort() == storage.getCurrentClientPort()) {
                         if (type.equals("share")) {
-                            String text = "The playlist " + Utils.colorize(playlistName, Colors.GREEN)
+                            String text = "Playlist " + Utils.colorize(playlistName, Colors.GREEN)
                                     + " already exist in the list of music on the server";
                             out.println(text);
-                            Logs.info(text);
+                            LogsServer.info(text);
                         } else {
-                            String text = "The playlist " + Utils.colorize(playlistName, Colors.GREEN)
+                            String text = "Playlist " + Utils.colorize(playlistName, Colors.GREEN)
                                     + " removed from the list of music";
                             out.println(text);
                             storage.removeSharedEntry(entry);
-                            Logs.info(text);
+                            LogsServer.info(text);
                         }
                         out.println("end");
                         return;
@@ -119,12 +118,12 @@ public class HandleShareUnShare implements CommandServer {
                     String text = "Playlist " + Utils.colorize(playlistName, Colors.GREEN)
                             + " added to the list of music";
                     out.println(text);
-                    Logs.info(text);
+                    LogsServer.info(text);
                 } else {
                     String text = "The playlist " + Utils.colorize(playlistName, Colors.GREEN)
                             + " doesn't exist in the list of music on the server";
                     out.println(text);
-                    Logs.info(text);
+                    LogsServer.info(text);
                 }
                 out.println("end");
             }

@@ -4,7 +4,7 @@ import java.net.*;
 import java.util.*;
 
 /**
- * This class is use to store information about a client for json serialization
+ * This class is use to store important information about a client for json serialization
  */
 public class ClientData {
     public InetAddress serverAddress;

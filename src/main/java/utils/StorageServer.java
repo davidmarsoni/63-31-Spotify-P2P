@@ -4,8 +4,6 @@ import java.net.InetAddress;
 import java.util.*;
 
 import Classes.Client;
-import Classes.Entry;
-import Classes.MusicFile;
 import CommandsServer.ClientShareInfoCommand;
 import CommandsServer.CommandServer;
 import CommandsServer.EndCommand;
@@ -51,42 +49,30 @@ public class StorageServer extends Storage{
     }
 
     public void updateClientEntry(Boolean isAvailable) {
-        // each entry that have the current client address and port will be updated to be alvailable
-        for (Entry entry : getSharedEntries()) {
-            if (entry.getClientAdress().equals(getCurrentClientAddress()) && entry.getClientPort() == getCurrentClientPort()) {
-                entry.setAvailable(isAvailable);
-            }
-        }
+        getSharedEntries().stream()
+            .filter(entry -> entry.getClientAdress().equals(getCurrentClientAddress()) && entry.getClientPort() == getCurrentClientPort())
+            .forEach(entry -> entry.setAvailable(isAvailable));
     }
 
     public void addClient(Client client) {
-        //only add the client if it's not already in the list
-        for (Client client2 : clients) {
-            if (client2.getClientAdress().equals(client.getClientAdress()) && client2.getClientPort() == client.getClientPort()) {
-                return;
-            }
+        boolean exists = clients.stream().anyMatch(client2 -> client2.getClientAdress().equals(client.getClientAdress()) && client2.getClientPort() == client.getClientPort());
+        if (!exists) {
+            clients.add(client);
         }
-        clients.add(client);
     }
 
     public void removeClient(Client client) {
-        for (Client client2 : clients) {
-            if (client2.getClientAdress().equals(client.getClientAdress()) && client2.getClientPort() == client.getClientPort()) {
-                clients.remove(client2);
-            }
-        }
+        clients.removeIf(client2 -> client2.getClientAdress().equals(client.getClientAdress()) && client2.getClientPort() == client.getClientPort());
     }
 
     public void updateClient(Client client) {
-        for (Client client2 : clients) {
-            if (client2.getClientAdress().equals(client.getClientAdress()) && client2.getClientPort() == client.getClientPort()) {
+        clients.stream()
+            .filter(client2 -> client2.getClientAdress().equals(client.getClientAdress()) && client2.getClientPort() == client.getClientPort())
+            .findFirst()
+            .ifPresentOrElse(client2 -> {
                 client2.setAvailable(client.isAvailable());
                 updateClientEntry(client.isAvailable());
-                return;
-            }
-        }
-        //if the client is not in the list we add it
-        addClient(client);
+            }, () -> addClient(client));
     }
     public LinkedList<Client> getClients() {
         return clients;

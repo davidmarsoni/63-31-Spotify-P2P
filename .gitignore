@@ -47,4 +47,3 @@ out/
 /.VSCodeCounter/
 /logs/
 /tests/
-*.json

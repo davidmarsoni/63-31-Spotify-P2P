@@ -10,7 +10,6 @@ public class Colors {
     public static final String PURPLE = "\u001B[35m";
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
-    public static final String DARK_PURPLE = "\u001B[38;5;54m";
 
     public static final String BLACK_H = "\u001B[40m";
     public static final String RED_H = "\u001B[41m";

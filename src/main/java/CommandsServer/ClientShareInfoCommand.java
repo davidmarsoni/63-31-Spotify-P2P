@@ -24,8 +24,8 @@ public class ClientShareInfoCommand implements CommandServer {
             Client client = new Client(ip, port);
             storage.updateClient(client);
 
-            LogsServer.info("Client address for listening : " + Utils.colorize(ip, Colors.DARK_PURPLE) + ":"
-                    + Utils.colorize(String.valueOf(port), Colors.DARK_PURPLE));
+            LogsServer.info("Client address for listening : " + Utils.colorize(ip, Colors.PURPLE) + ":"
+                    + Utils.colorize(String.valueOf(port), Colors.PURPLE));
         } catch (Exception e) {
             e.printStackTrace();
         }
