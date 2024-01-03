@@ -14,6 +14,7 @@ import CommandsServer.HelpCommand;
 import CommandsServer.PingCommand;
 import CommandsServer.SendListEntryCommand;
 
+//TODO do a init method to init the server and be able to change the port and the address of the server
 public class StorageServer extends Storage{
     private static StorageServer instance = null;
     private LinkedList<Client> clients = new LinkedList<Client>();

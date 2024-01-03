@@ -21,6 +21,7 @@ public class Init implements Command {
         // print the title
         Utils.title("Initialization", Colors.BLUE_H);
         System.out.println("Choose your initialization method\n1 : init the client with a json file\n2 : enter information about the client manually");
+        System.out.println("note : if you use the init method when the client is already started you will need to restart the client to apply the changes with the new configuration file");
         String choice = Utils.ask("Enter your desired init method", "1/2", "1", "2", true);
         
         switch (choice) {

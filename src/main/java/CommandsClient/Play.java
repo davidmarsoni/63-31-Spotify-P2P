@@ -99,8 +99,9 @@ public class Play implements Command {
     }
 
     private void streamEntry(String type, String name, String path, String ip, int port) {
+        Socket clientSocket = null;
         try {
-            Socket clientSocket = new Socket(ip, port);
+            clientSocket = new Socket(ip, port);
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out.println("stream");
@@ -159,10 +160,14 @@ public class Play implements Command {
                 }
             }
 
-        } catch (
-
-        IOException e) {
-            e.printStackTrace();
+        } catch ( IOException e) {
+           
+        }finally{
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+              
+            }
         }
     }
 

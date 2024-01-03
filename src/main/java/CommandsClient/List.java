@@ -3,9 +3,6 @@ package CommandsClient;
 import utils.*;
 import java.io.*;
 
-import Classes.MusicFile;
-import Classes.PlayList;
-
 /**
  * ListMusics command
  * This command is used to list all Entry available on the server
@@ -116,7 +113,7 @@ public class List implements Command{
 
         help += "Usage: " + Utils.colorize("list", Colors.YELLOW) + " " + Utils.colorize("<music/playlist name>", Colors.GREEN) + " " + Utils.colorize("<host:port>", Colors.GREEN) + "\n";
 
-        return "List all the musics available on the server";
+        return help;
     }
 
 }
