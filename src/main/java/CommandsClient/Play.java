@@ -163,6 +163,7 @@ public class Play implements Command {
         } catch ( IOException e) {
            
         }finally{
+            System.out.println("End of the stream");
             try {
                 clientSocket.close();
             } catch (IOException e) {

@@ -6,6 +6,8 @@ import CommandsServer.CommandServer;
 import java.util.logging.Level;
 
 import Classes.ThreadData;
+import CommandsClient.Command;
+import CommandsClient.InitServer;
 import utils.*;
 
 public class Server {
@@ -21,8 +23,36 @@ public class Server {
     public static void start() {
         Utils.renderStart(true);
         storage.setSrvSocket(ServerManagement.initializedServerSocket(storage.getPort()));
+
+        Command init = new InitServer();
+        init.execute(null);
+
+        new Thread(() -> {
+            while (true) {
+                try {
+                    //each 10 min save the data
+                    Thread.sleep(600000);
+                    storage.save();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        // When the server is closed, save the data
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Closing server...");
+            storage.save();
+            System.out.println("Server closed");
+        }));
+
+
         loop();
+
+       
     }
+
+    
 
     //correct client socket  for multi thread
     public static void loop() {

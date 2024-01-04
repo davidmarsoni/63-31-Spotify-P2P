@@ -39,7 +39,7 @@ public class Init implements Command {
 
     private void fileInit() {
         do {
-            String path = Utils.ask("Set the complete path of your", storage.getSavePath(), ".*\\.json$", storage.getSavePath(), true);
+            String path = Utils.ask("Set the complete path of your storage.json", storage.getSavePath(), ".*\\.json$", storage.getSavePath(), true);
             if (storage.setSavePath(path)) {
                 System.out.println("File path saved.");
                 storage.load();

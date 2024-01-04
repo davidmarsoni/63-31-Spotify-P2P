@@ -23,9 +23,26 @@ public class Storage {
     private Map<String, Command> commands;
     private Map<String, CommandServer> serverCommands;
     private LinkedList<Entry> entries = new LinkedList<Entry>();
-   
+    private String savePath = "storageServer.json";
+
 
     private static final String IP_ADDRESS_REGEX = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])(\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])){3}$";
+
+
+    public String getSavePath() {
+        return this.savePath;
+    }
+
+    public boolean setSavePath(String savePath) {
+        if(savePath.endsWith(".json")){
+            this.savePath = savePath;
+            return true;
+        }else{
+            System.out.println("Invalid file format, the file must be a json file");
+            return false;
+        }
+        
+    }
 
     public int getPort() {
         return this.port;

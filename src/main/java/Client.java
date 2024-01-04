@@ -23,6 +23,13 @@ public class Client {
         cmd.execute(null);
 
         Utils.title("Client is ready", Colors.GREEN_H);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Closing client...");
+            storage.save();
+            System.out.println("Client closed");
+        }));
+
         loop();
     }
 

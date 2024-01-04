@@ -19,7 +19,6 @@ import CommandsServer.StreamEntry;
 
 public class StorageClient extends Storage {
     private static StorageClient instance;
-    private String savePath = "storageClient.json";
 
     // client part
     private InetAddress serverAddress;
@@ -45,24 +44,12 @@ public class StorageClient extends Storage {
        
     }
 
-    public String getSavePath() {
-        return this.savePath;
-    }
-
-    public boolean setSavePath(String savePath) {
-        if(savePath.endsWith(".json")){
-            this.savePath = savePath;
-            return true;
-        }else{
-            System.out.println("Invalid file format, the file must be a json file");
-            return false;
-        }
-        
-    }
+  
     
     public static StorageClient getInstance() {
         if (instance == null) {
             instance = new StorageClient();
+            instance.setSavePath("storageClient.json");
             instance.initCommands();
         }
         return instance;
@@ -81,6 +68,7 @@ public class StorageClient extends Storage {
             client.entries = getSharedEntries();
             String json = gson.toJson(client);
             writer.println(json);
+            System.out.println("The file is saved at : " + getSavePath());
             writer.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

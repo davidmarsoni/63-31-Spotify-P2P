@@ -75,6 +75,14 @@ public class HandleShareUnShare implements CommandServer {
             } else if (splitData[0].equals("playlist")) {
                 // get the playlist info from the client
                 String playlistName = splitData[1].trim();
+
+                if(playlistName.isEmpty() || playlistName.isBlank() || playlistName == null || playlistName == ""){
+                    String text = "The playlist name is empty or null";
+                    out.println(text);
+                    LogsServer.info(text);
+                    out.println("end");
+                    return;
+                }
                 String playlistPath = splitData[2];
 
                 // the end are the list of music file in the playlist and it end with end
