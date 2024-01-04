@@ -22,10 +22,11 @@ public class Server {
 
     public static void start() {
         Utils.renderStart(true);
-        storage.setSrvSocket(ServerManagement.initializedServerSocket(storage.getPort()));
 
         Command init = new InitServer();
         init.execute(null);
+
+
 
         new Thread(() -> {
             while (true) {
@@ -46,7 +47,7 @@ public class Server {
             System.out.println("Server closed");
         }));
 
-
+        storage.setSrvSocket(ServerManagement.initializedServerSocket(storage.getPort()));
         loop();
 
        

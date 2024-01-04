@@ -98,7 +98,6 @@ Because of big functionnalities and the fact that i have to do a lot of refactor
 
 ## 21-24 december 2023
 
-
 ### Work done
 
 - Create a Storage class to merge similar code beetween the 2 StorageClient and StorageServer class
