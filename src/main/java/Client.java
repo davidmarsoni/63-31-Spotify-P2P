@@ -21,6 +21,10 @@ public class Client {
     
         Command cmd = commands.get("init"); 
         cmd.execute(null);
+        //update the init to not be able to change the listening port of the client
+        Init init = (Init) cmd;
+        init.setStartConfig(false);
+
 
         Utils.title("Client is ready", Colors.GREEN_H);
 

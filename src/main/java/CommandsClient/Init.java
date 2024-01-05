@@ -6,9 +6,11 @@ import utils.*;
  * Init Command
  * This command is used to configure the server address and port of the server
  */
+// TODO see config of the listening port only if the client is not started
 public class Init implements Command {
     // get the storage instance
     private StorageClient storage = StorageClient.getInstance();
+    public Boolean startConfig = true;
 
     // create a scanner to get the user input
     /**
@@ -19,31 +21,40 @@ public class Init implements Command {
     @Override
     public void execute(String argument) {
         // print the title
-        Utils.title("Initialization", Colors.BLUE_H);
-        System.out.println("Choose your initialization method\n1 : init the client with a json file\n2 : enter information about the client manually");
-        System.out.println("note : if you use the init method when the client is already started you will need to restart the client to apply the changes with the new configuration file");
-        String choice = Utils.ask("Enter your desired init method", "1/2", "1", "2", true);
-        
-        switch (choice) {
-            case "1":
-                fileInit();
-                break;
-            case "2":
-                manualInit();
-                break;
-            default:
-                System.out.println("Invalid choice");
-                break;
+        if(startConfig == true){
+            Utils.title("Initialization", Colors.BLUE_H);
+            System.out.println(
+                    "Choose your initialization method\n1 : init the client with a json file\n2 : enter information about the client manually");
+            String choice = Utils.ask("Enter your desired init method", "1/2", "1", "2", true);
+
+            switch (choice) {
+                case "1":
+                    fileInit();
+                    break;
+                case "2":
+                    manualInit();
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+                    break;
+            }
+        }else{
+            manualInit();
         }
+    }
+
+    public void setStartConfig(Boolean startConfig) {
+        this.startConfig = startConfig;
     }
 
     private void fileInit() {
         do {
-            String path = Utils.ask("Set the complete path of your storage.json", storage.getSavePath(), ".*\\.json$", storage.getSavePath(), true);
-            
+            String path = Utils.ask("Set the complete path of your storage.json", storage.getSavePath(), ".*\\.json$",
+                    storage.getSavePath(), true);
+
             path = path.replaceAll("\"", "");
             path = path.replaceAll("'", "");
-            
+
             if (storage.setSavePath(path)) {
                 System.out.println("File path saved.");
                 storage.load();
@@ -73,25 +84,30 @@ public class Init implements Command {
         storage.setServerPort(serverPort);
 
         // ask for the listening port of the client
-        int listeningPort = storage.getPort();
-        if(listeningPort == 0){
-            listeningPort = Utils.getAvailablePort();
+        if (startConfig == true) {
+            int listeningPort = storage.getPort();
+            if (listeningPort == 0) {
+                listeningPort = Utils.getAvailablePort();
+            }
+            do {
+                String tmpClientPort = Utils.ask("Client Listening port", String.valueOf(listeningPort),
+                        "^([0-9]{1,4}|[0-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6])$",
+                        String.valueOf(listeningPort), true);
+                listeningPort = Integer.parseInt(tmpClientPort);
+            } while (!storage.setPort(listeningPort));
         }
-        do {
-            String tmpClientPort = Utils.ask("Client Listening port", String.valueOf(listeningPort),
-                    "^([0-9]{1,4}|[0-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6])$",
-                    String.valueOf(listeningPort), true);
-            listeningPort = Integer.parseInt(tmpClientPort);
-        } while (!storage.setPort(listeningPort));
 
         System.out.println("");
         System.out.println("New server address and port saved");
         System.out.println("Server : " + Utils.colorize(storage.getServerAddress(), Colors.PURPLE) + ":"
                 + Utils.colorize(String.valueOf(storage.getServerPort()), Colors.PURPLE));
-        System.out.println("Client : " + Utils.colorize(storage.getLocalAdressString(), Colors.PURPLE)
-                + ":"
-                + Utils.colorize(String.valueOf(storage.getPort()), Colors.PURPLE));
-        System.out.println("");
+        
+        if(startConfig == true){
+            System.out.println("Client : " + Utils.colorize(storage.getLocalAdressString(), Colors.PURPLE)
+                    + ":"
+                    + Utils.colorize(String.valueOf(storage.getPort()), Colors.PURPLE));
+            System.out.println("");
+        }
     }
 
     /**

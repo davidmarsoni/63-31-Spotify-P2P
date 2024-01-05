@@ -13,7 +13,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import Classes.Client;
-import Classes.ClientData;
 import Classes.Entry;
 import Classes.MusicFile;
 import Classes.PlayList;
@@ -27,12 +26,8 @@ import CommandsServer.HandleUnShareCommand;
 import CommandsServer.HelpCommand;
 import CommandsServer.PingCommand;
 import CommandsServer.SendListEntryCommand;
-
-
 import java.lang.reflect.Type;
 
-
-//TODO do a init method to init the server and be able to change the port and the address of the server
 public class StorageServer extends Storage{
     private static StorageServer instance = null;
     private LinkedList<Client> clients = new LinkedList<Client>();
