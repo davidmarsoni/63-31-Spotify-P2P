@@ -38,7 +38,8 @@ public class InitServer implements Command {
 
     private void fileInit() {
         do {
-            String path = Utils.ask("Set the complete path of your storage.json", storage.getSavePath(), ".*\\.json$", storage.getSavePath(), true);
+            String path = Utils.ask("Set the complete path of your storage.json", storage.getSavePath(), ".*\\.json$"
+            , storage.getSavePath(), true);
              
             path = path.replaceAll("\"", "");
             path = path.replaceAll("'", "");

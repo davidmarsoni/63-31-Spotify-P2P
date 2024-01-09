@@ -43,6 +43,7 @@ public class Server {
         // When the server is closed, save the data
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Closing server...");
+            LogsServer.log(Level.INFO, "Closing server...",false);
             storage.save();
             System.out.println("Server closed");
         }));
@@ -52,8 +53,6 @@ public class Server {
 
        
     }
-
-    
 
     //correct client socket  for multi thread
     public static void loop() {
@@ -65,6 +64,7 @@ public class Server {
                 Socket srvSocket = storage.getSrvSocket().accept();
 
                 new Thread(() -> {
+                    
                     ThreadData threadData = new ThreadData(srvSocket);
                     storage.addThreadData(threadData);
                     storage.setClientSocket(srvSocket);

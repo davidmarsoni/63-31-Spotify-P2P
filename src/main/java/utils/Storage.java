@@ -202,14 +202,14 @@ public class Storage {
 
     public Entry findEntryByName(String name) {
         return entries.stream()
-                      .filter(entry -> entry.getName().equals(name))
+                      .filter(entry -> entry.getName().equals(name) && entry.isAvailable())
                       .findFirst()
                       .orElse(null);
     }
 
     public Entry findEntryByNameAndClientAdressAndPort(String name, String clientAdress, int clientPort) {
         return entries.stream()
-                      .filter(entry -> entry.getName().equals(name) && entry.getClientAdress().equals(clientAdress) && entry.getClientPort() == clientPort)
+                      .filter(entry -> entry.getName().equals(name) && entry.getClientAdress().equals(clientAdress) && entry.getClientPort() == clientPort && entry.isAvailable())
                       .findFirst()
                       .orElse(null);
     }

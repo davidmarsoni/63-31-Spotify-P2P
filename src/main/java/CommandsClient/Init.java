@@ -49,7 +49,7 @@ public class Init implements Command {
 
     private void fileInit() {
         do {
-            String path = Utils.ask("Set the complete path of your storage.json", storage.getSavePath(), ".*\\.json$",
+            String path = Utils.ask("Set the complete path of your storage.json", storage.getSavePath(),".*\\.json$",
                     storage.getSavePath(), true);
 
             path = path.replaceAll("\"", "");
@@ -115,7 +115,7 @@ public class Init implements Command {
      */
     @Override
     public String help() {
-        return "Allow you to configure the server address and port";
+        return "Allow you to change the configuration of the client";
     }
 
 }

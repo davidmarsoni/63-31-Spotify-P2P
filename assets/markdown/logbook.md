@@ -160,3 +160,21 @@ I have encounter my biggest problem on the project because i was not able to str
 - write the lookbook of the project
 - add the init command to the server
 - add json storage for the server
+
+## 05 december 2023
+
+### Work done
+
+- update init command to be able to block change of the listening port
+- do some test for the project
+- Add screens of a test of the project in the example folder
+
+## 06 - 08 december 2023
+
+### Work done
+
+- do some minor correction on the code
+- update the readme
+- correct the init command because it was not working with " or ' in the path of the config file
+- update music for the example folder
+- add the user manual

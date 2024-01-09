@@ -11,7 +11,6 @@ For help here is a tutorial for installing Maven in Windows
 
 - [How to Install Maven on Windows](https://phoenixnap.com/kb/install-maven-windows)
 
-
 ## Build
 
 Before build our project re-open your IDE if you have installed Maven or java after opening your IDE.

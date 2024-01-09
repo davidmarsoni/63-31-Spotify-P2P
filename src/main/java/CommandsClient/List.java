@@ -108,10 +108,10 @@ public class List implements Command{
     @Override
     public String help() {
         String help = "List all the musics available on the server\n";
-        help += "Usage: " + Utils.colorize("list", Colors.YELLOW) + "\n";
-        help += "Usage: " + Utils.colorize("list", Colors.YELLOW) + " " + Utils.colorize("<music/playlist name>", Colors.GREEN) + " to get all the information about the first music/playlist with this name on the server\n";
+        help += "Usage: " + Utils.colorize("list", Colors.YELLOW) + " to get all the information about all the music/playlist on the server\n";
+        help += "Usage: " + Utils.colorize("list", Colors.YELLOW) + " " + Utils.colorize("<music/playlist name>", Colors.GREEN) + " to detailed information about the first music/playlist with this name on the server\n";
 
-        help += "Usage: " + Utils.colorize("list", Colors.YELLOW) + " " + Utils.colorize("<music/playlist name>", Colors.GREEN) + " " + Utils.colorize("<host:port>", Colors.GREEN) + "\n";
+        help += "Usage: " + Utils.colorize("list", Colors.YELLOW) + " " + Utils.colorize("<music/playlist name>", Colors.GREEN) + " " + Utils.colorize("<host:port>", Colors.GREEN) + " to get detailed information about the music/playlist on this specific host\n";
 
         return help;
     }

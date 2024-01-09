@@ -164,10 +164,12 @@ public class Play implements Command {
            
         }finally{
             System.out.println("End of the stream");
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-              
+            if(clientSocket != null){
+                try {
+                    clientSocket.close();
+                } catch (IOException e) {
+                   
+                }
             }
         }
     }
@@ -175,9 +177,9 @@ public class Play implements Command {
     @Override
     public String help() {
         String help = "";
-        help += "This command is used to play a file from the server\n";
+        help += "This command is used to play in streaming a file\n";
         help += "Usage   : " + Utils.colorize("play ", Colors.YELLOW) + Utils.colorize("<file name>", Colors.GREEN)
-                + " to play a file from the server (the first file name like this will be Donwloading)\n";
+                + " to play a file from the first host that have this musics (the first file name like this will be streamed)\n";
         help += "          " + Utils.colorize("play ", Colors.YELLOW)
                 + Utils.colorize("<file name> <ip and port of the host>", Colors.GREEN)
                 + " to play a file from a specific person\n";

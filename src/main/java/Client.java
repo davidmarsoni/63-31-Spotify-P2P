@@ -71,7 +71,7 @@ public class Client {
         Thread listeningThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                storage.setSrvSocket(ServerManagement.initializedServerSocket("eth0", storage.getPort(), 10, 180000, false));
+                storage.setSrvSocket(ServerManagement.initializedServerSocket( storage.getPort(), 10, 180000, false));
                 while (true) {
                     ServerManagement.handleNewConnection(storage.getSrvSocket(), storage,false);
                 }

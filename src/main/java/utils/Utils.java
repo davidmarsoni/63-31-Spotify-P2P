@@ -87,6 +87,8 @@ public class Utils {
                 type = regex2;
                 valid = true;
             } 
+            type = type.replaceAll("\"", "");
+            type = type.replaceAll("\'", "");  
 
             if (type.matches(regex1) || type.matches(regex2)) {
                 valid = true;

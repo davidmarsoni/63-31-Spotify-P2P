@@ -4,10 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Enumeration;
 
 import Classes.ThreadData;
 import CommandsServer.CommandServer;
@@ -15,37 +13,12 @@ import CommandsServer.CommandServer;
 public class ServerManagement {
 
     public static ServerSocket initializedServerSocket(int port) {
-        return initializedServerSocket("eth0", port, 10, 180000, true);
+        return initializedServerSocket( port, 10, 180000, true);
     }
 
-    public static ServerSocket initializedServerSocket(String interfaceName, int port) {
-        return initializedServerSocket(interfaceName, port, 10, 180000, true);
-    }
-
-    public static ServerSocket initializedServerSocket(String interfaceName, int port, int backlog, int timeout,
-            boolean verbose) {
-        InetAddress localAddress = null;
+    public static ServerSocket initializedServerSocket(int port, int backlog, int timeout, boolean verbose) {
         try {
-            NetworkInterface ni = NetworkInterface.getByName(interfaceName);
-            Enumeration<InetAddress> inetAddresses = ni.getInetAddresses();
-            while (inetAddresses.hasMoreElements()) {
-                InetAddress ia = inetAddresses.nextElement();
-
-                if (!ia.isLinkLocalAddress()) {
-                    if (!ia.isLoopbackAddress()) {
-                        if (verbose) {
-                            System.out.println(ni.getName() + "->IP: " + ia.getHostAddress());
-                        }
-
-                        localAddress = ia;
-                    }
-                }
-            }
-            if (localAddress == null) {
-                if (verbose) {
-                    System.out.println("No non-local address found for interface " + interfaceName);
-                }
-            }
+            InetAddress localAddress = InetAddress.getByName("127.0.0.1");
 
             ServerSocket srvSocket = new ServerSocket(port, backlog, localAddress);
 

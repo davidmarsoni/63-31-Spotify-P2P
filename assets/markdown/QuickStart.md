@@ -53,7 +53,6 @@ this message should appear:
 
 ![connect complete](../images/connect_complete_quickstart.png)
 
-
 once you are connected you can use the following command to see all the available commands on the client:
 
 ```bash
