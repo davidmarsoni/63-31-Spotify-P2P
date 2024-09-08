@@ -8,7 +8,7 @@ The goal of this project is to create a peer-to-peer music streaming application
 - [Build the project](assets/markdown/Build.md)
 - [Quickstart](assets/markdown/QuickStart.md)
 - [User Manual](assets/markdown/UserManual.md)
-- [Logbook](assets/markdown/Logbook.md)
+- [Logbook](assets/markdown/logbook.md)
 - [Project Justification](assets/markdown/ProjectJustification.md)
 
 ## Requirements
